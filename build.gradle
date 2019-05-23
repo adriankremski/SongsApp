@@ -38,6 +38,7 @@ ext {
 
     // Libraries
     coroutinesVersion = "1.2.1"
+    gsonVersion = '2.8.5'
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -45,6 +46,7 @@ ext {
     jodaTime = 'net.danlew:android.joda:2.10.1.2'
     okHttpVersion = '3.14.2'
     retrofitVersion = '2.5.0'
+    gson = "com.google.code.gson:gson:$gsonVersion"
 
     domainDependencies = [
             coroutinesCore   : coroutinesCore,
@@ -63,6 +65,7 @@ ext {
             coroutinesCore           : coroutinesCore,
             coroutinesAndroid        : coroutinesAndroid,
             jodaTime                 : jodaTime,
+            gson                     : gson,
             retrofitCoroutinesAdapter: "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2",
             okHttp                   : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okHttpLogger             : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
