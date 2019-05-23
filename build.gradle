@@ -39,6 +39,10 @@ ext {
     // Libraries
     coroutinesVersion = "1.2.1"
     gsonVersion = '2.8.5'
+    lifecycleVersion = "2.2.0-alpha01"
+    koinVersion = "2.0.0-GA6"
+    roomVersion = '2.1.0-alpha04'
+    navVersion = "2.0.0"
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -47,6 +51,39 @@ ext {
     okHttpVersion = '3.14.2'
     retrofitVersion = '2.5.0'
     gson = "com.google.code.gson:gson:$gsonVersion"
+    lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    lifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+
+    mobileDependencies = [
+            koinCore            : "org.koin:koin-core:$koinVersion",
+            koinCoreExt         : "org.koin:koin-core-ext:$koinVersion",
+            koinAndroid         : "org.koin:koin-android:$koinVersion",
+            koinAndroidScope    : "org.koin:koin-android-scope:$koinVersion",
+            koinAndroidViewModel: "org.koin:koin-android-viewmodel:$koinVersion",
+            constraintLayout    : "androidx.constraintlayout:constraintlayout:2.0.0-alpha2",
+            navigationFragment  : "androidx.navigation:navigation-fragment-ktx:$navVersion",
+            navigationUi        : "androidx.navigation:navigation-ui-ktx:$navVersion",
+            adapterDelegates    : 'com.hannesdorfmann:adapterdelegates4:4.0.0',
+            kotlin              : kotlin,
+            lifecycleRuntime    : lifecycleRuntime,
+            lifecycleExtensions : lifecycleExtensions,
+            lifecycleCompiler   : lifecycleCompiler,
+            coroutinesCore      : coroutinesCore,
+            coroutinesAndroid   : coroutinesAndroid,
+            jodaTime            : jodaTime
+    ]
+
+    presentationDependencies = [
+            kotlin             : kotlin,
+            lifecycleExtensions: lifecycleExtensions,
+            lifecycleViewModel : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            coroutinesCore     : coroutinesCore,
+            coroutinesAndroid  : coroutinesAndroid,
+            lifecycleRuntime   : lifecycleRuntime,
+            lifecycleExtensions: lifecycleExtensions,
+            lifecycleCompiler  : lifecycleCompiler
+    ]
 
     domainDependencies = [
             coroutinesCore   : coroutinesCore,

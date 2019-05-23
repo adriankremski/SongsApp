@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: "kotlin-kapt"
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -20,14 +22,47 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    def mobileDependencies = rootProject.ext.mobileDependencies
+
+    implementation project(':presentation')
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':remote')
+
+    implementation mobileDependencies.koinCore
+    implementation mobileDependencies.koinCoreExt
+    implementation mobileDependencies.koinAndroid
+    implementation mobileDependencies.koinAndroidScope
+    implementation mobileDependencies.koinAndroidViewModel
+    implementation mobileDependencies.kotlin
+    implementation mobileDependencies.constraintLayout
+    implementation mobileDependencies.navigationFragment
+    implementation mobileDependencies.navigationUi
+    implementation mobileDependencies.lifecycleRuntime
+    implementation mobileDependencies.lifecycleExtensions
+    implementation mobileDependencies.coroutinesCore
+    implementation mobileDependencies.coroutinesAndroid
+    implementation mobileDependencies.adapterDelegates
+    implementation mobileDependencies.jodaTime
+
+    kapt mobileDependencies.lifecycleCompiler
 }
