@@ -1,10 +1,16 @@
 package com.github.snuffix.songapp
 
 import android.app.Application
+import com.github.snuffix.songapp.cache.SongsLocalSourceImpl
+import com.github.snuffix.songapp.cache.db.SongsDatabase
+import com.github.snuffix.songapp.cache.mapper.CachedSongsMapper
+import com.github.snuffix.songapp.cache.mapper.RawSongsMapper
+import com.github.snuffix.songapp.cache.parser.SongsParser
 import com.github.snuffix.songapp.presentation.SongsViewModel
 import com.github.snuffix.songapp.remote.SongsRemoteSourceImpl
 import com.github.snuffix.songapp.data.SongRepositoryImpl
 import com.github.snuffix.songapp.data.mapper.SongsEntityMapper
+import com.github.snuffix.songapp.data.repository.SongsLocalSource
 import com.github.snuffix.songapp.data.repository.SongsRemoteSource
 import com.github.snuffix.songapp.domain.repository.SongsRepository
 import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
@@ -31,9 +37,17 @@ class SongsApp : Application() {
             // Android context
             androidContext(this@SongsApp)
             // modules
-            modules(remoteModule, dataModule, domainModule, presentationModule, uiModule)
+            modules(cacheModule, remoteModule, dataModule, domainModule, presentationModule, uiModule)
         }
     }
+}
+
+val cacheModule = module {
+    single { SongsDatabase.getInstance(get()) }
+    single { CachedSongsMapper() }
+    single { RawSongsMapper() }
+    single { SongsParser() }
+    singleBy<SongsLocalSource, SongsLocalSourceImpl>()
 }
 
 val remoteModule = module {

@@ -16,7 +16,8 @@ const val QUERY_LIMIT = 50
 
 open class SongRepositoryImpl constructor(
     private val mapper: SongsEntityMapper,
-    private val remoteSource: SongsRemoteSource
+    private val remoteSource: SongsRemoteSource,
+    private val localSource: SongsLocalSource
 ) : SongsRepository {
 
     override suspend fun getRemoteSongs(query: String, offset: Int): Result<List<Song>> {
@@ -28,12 +29,11 @@ open class SongRepositoryImpl constructor(
     }
 
     override suspend fun getLocalSongs(query: String, offset: Int): Result<List<Song>> {
-        return Result.Ok(listOf())
-//        val result = getResult { localSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
-//
-//        return result.whenOkReturn { songs ->
-//            songs.map { mapper.mapFromEntity(it) }
-//        }
+        val result = getResult { localSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
+
+        return result.whenOkReturn { songs ->
+            songs.map { mapper.mapFromEntity(it) }
+        }
     }
 }
 
