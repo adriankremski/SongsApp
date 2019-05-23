@@ -48,4 +48,10 @@ ext {
             coroutinesAndroid: coroutinesAndroid,
             kotlin           : kotlin
     ]
+
+    dataDependencies = [
+            coroutinesCore   : coroutinesCore,
+            coroutinesAndroid: coroutinesAndroid,
+            kotlin           : kotlin
+    ]
 }
