@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Songapp</string>
+    <string name="itunes_songs">iTunes</string>
+    <string name="local_songs">Local</string>
+    <string name="all_songs">All songs</string>
+    <string name="screen_title_songs">Songs</string>
+    <string name="hint_search_songs">Type song name</string>
 </resources>
