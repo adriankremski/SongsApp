@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/songs_source_types"
+           android:checkableBehavior="single">
+        <item android:id="@+id/itunes_songs"
+              android:title="@string/itunes_songs"
+              android:checked="true"
+        />
+        <item android:title="@string/local_songs"
+              android:id="@+id/local_songs"
+        />
+        <item android:title="@string/all_songs"
+              android:id="@+id/all_songs"
+        />
+    </group>
+</menu>
