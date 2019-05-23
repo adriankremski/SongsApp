@@ -20,19 +20,6 @@ sealed class Result<out T : Any> {
         return this
     }
 
-    inline fun whenApiError(errorCode: Int? = null, block: ApiError.() -> Unit): Result<T> {
-        if (this is ApiError) {
-            if (errorCode == null) {
-                this.block()
-                this.isHandled = true
-            } else if (errorCode == this.code) {
-                this.block()
-                this.isHandled = true
-            }
-        }
-        return this
-    }
-
     inline fun whenError(block: Error.() -> Unit): Result<T> {
         if (!this.isHandled && this is Error && this !is CancelledError) {
             this.block()

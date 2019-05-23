@@ -14,6 +14,7 @@
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
                 style="@style/Widget.Design.AppBarLayout"
+                android:background="@android:color/background_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elevation="0dp">
@@ -21,6 +22,7 @@
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:theme="@style/DefaultToolbar"
+                    android:background="?colorPrimary"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
@@ -32,24 +34,37 @@
                         android:layout_height="wrap_content"/>
             </androidx.appcompat.widget.Toolbar>
 
-        </com.google.android.material.appbar.AppBarLayout>
+            <FrameLayout
+                    android:id="@+id/searchProgress"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <!--        <androidx.core.widget.ContentLoadingProgressBar-->
-        <!--                android:id="@+id/contentLoading"-->
-        <!--                style="?android:attr/progressBarStyleLarge"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_gravity="center"-->
-        <!--                android:layout_marginLeft="@dimen/list_screen_recycler_horizontal_margin"-->
-        <!--                android:layout_marginTop="@dimen/spacing_1x_small"-->
-        <!--                android:layout_marginRight="@dimen/list_screen_recycler_horizontal_margin"-->
-        <!--                android:layout_marginBottom="@dimen/list_screen_recycler_horizontal_margin"-->
-        <!--                android:backgroundTint="@color/white"-->
-        <!--                android:indeterminateTint="?progressPrimaryColor"-->
-        <!--                android:visibility="gone"/>-->
+                <TextView
+                        style="@style/ListSubtitle1"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        android:gravity="center"
+                        android:drawablePadding="@dimen/spacing_normal"
+                        android:drawableStart="@drawable/ic_search_black_24dp"
+                        android:text="@string/searching"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <ProgressBar
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_margin="@dimen/spacing_medium"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+
+            </FrameLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/songsRecycler"
+                android:descendantFocusability="beforeDescendants"
+                android:background="@android:color/background_light"
                 android:padding="@dimen/spacing_normal"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"

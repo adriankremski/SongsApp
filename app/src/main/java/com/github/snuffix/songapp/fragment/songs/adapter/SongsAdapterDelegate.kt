@@ -1,4 +1,4 @@
-package com.github.snuffix.songapp.recycler.songs
+package com.github.snuffix.songapp.fragment.songs.adapter
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,11 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
 import com.github.snuffix.songapp.model.Song
-import com.github.snuffix.songapp.recycler.ViewItem
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import kotlinx.android.synthetic.main.item_song_row.view.*
 import java.text.DateFormat
-
 
 class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
 

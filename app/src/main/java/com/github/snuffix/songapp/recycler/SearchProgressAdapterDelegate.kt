@@ -1,23 +1,23 @@
-package com.github.snuffix.songapp.recycler.songs
+package com.github.snuffix.songapp.recycler
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
-import com.github.snuffix.songapp.recycler.ViewItem
+import com.github.snuffix.songapp.fragment.songs.adapter.ViewItem
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 
-class ProgressAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
+class SearchProgressAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
 
     override fun onBindViewHolder(
         items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>
     ) {
-        val visibility = if ((items[position] as Progress).show) View.VISIBLE else View.GONE
+        val visibility = if ((items[position] as SearchProgress).show) View.VISIBLE else View.GONE
         holder.itemView.visibility = visibility
     }
 
-    override fun isForViewType(items: List<ViewItem>, position: Int) = items[position] is Progress
+    override fun isForViewType(items: List<ViewItem>, position: Int) = items[position] is SearchProgress
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val itemView = parent.context.inflateView(R.layout.item_progress_row, parent)
@@ -25,4 +25,5 @@ class ProgressAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
     }
 }
 
-class Progress(var show: Boolean = false) : ViewItem
+class SearchProgress(var show: Boolean = false) : ViewItem
+

@@ -4,25 +4,22 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.snuffix.songapp.BR
 import com.github.snuffix.songapp.BaseFragment
 import com.github.snuffix.songapp.MainActivity
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.databinding.FragmentSongsBinding
+import com.github.snuffix.songapp.fragment.songs.adapter.SongsAdapter
 import com.github.snuffix.songapp.mapper.SongsMapper
-import com.github.snuffix.songapp.model.Song
 import com.github.snuffix.songapp.presentation.SearchMode
 import com.github.snuffix.songapp.presentation.SongsViewModel
-import com.github.snuffix.songapp.recycler.ViewItem
-import com.github.snuffix.songapp.recycler.songs.SongsAdapter
+import com.github.snuffix.songapp.recycler.decoration.VerticalSpaceItemDecoration
 import com.github.snuffix.songapp.utils.DebouncingQueryTextListener
+import com.github.snuffix.songapp.utils.RecyclerViewBottomScrollListener
 import kotlinx.android.synthetic.main.fragment_songs.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import com.github.snuffix.songapp.recycler.decoration.VerticalSpaceItemDecoration
-import com.github.snuffix.songapp.utils.RecyclerViewBottomScrollListener
 
 
 class SongsFragment : BaseFragment() {
@@ -69,24 +66,35 @@ class SongsFragment : BaseFragment() {
         }
 
         songsViewModel.showIncrementalProgress.observe {
-            it.getContentIfNotHandled()?.let {
-                songsAdapter.showProgress()
+            it.getContentIfNotHandled()?.let { show ->
+                songsAdapter.showIncrementalProgress(show)
                 songsAdapter.notifyDataSetChanged()
             }
         }
 
+        songsViewModel.showSearchProgress.observe {
+            it.getContentIfNotHandled()?.let { show ->
+                if (show) {
+                    searchProgress.clearAnimation()
+                    searchProgress.alpha = 1f
+                    searchProgress.visibility = View.VISIBLE
+                } else {
+                    if (songsAdapter.itemCount == 0) {
+                        searchProgress.visibility = View.GONE
+                    } else {
+                        searchProgress.animate().alpha(0f).withEndAction { searchProgress.visibility = View.GONE }.duration = 250
+                    }
+                }
+            }
+        }
+
         songsViewModel.songsData.observe(
-            onLoading = {
-            },
             onError = {
-                songsAdapter.hideProgress()
-                songsAdapter.notifyDataSetChanged()
                 Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
             },
             onSuccess = { resource ->
                 val items = resource.data.map { songsMapper.mapToUIModel(it) }
                 songsAdapter.items = items
-                songsAdapter.hideProgress()
                 songsAdapter.notifyDataSetChanged()
             }
         )
@@ -100,23 +108,12 @@ class SongsFragment : BaseFragment() {
             })
         }
 
-        songsRecycler.adapter = SongsAdapter(object : DiffUtil.ItemCallback<ViewItem>() {
-            override fun areItemsTheSame(oldItem: ViewItem, newItem: ViewItem): Boolean {
-                return if (oldItem is Song && newItem is Song) {
-                    oldItem.id == newItem.id
-                } else {
-                    false
-                }
-            }
+        songsRecycler.adapter = SongsAdapter()
+    }
 
-            override fun areContentsTheSame(oldItem: ViewItem, newItem: ViewItem): Boolean {
-                return if (oldItem is Song && newItem is Song) {
-                    oldItem.id == newItem.id
-                } else {
-                    false
-                }
-            }
-        })
+    override fun onPause() {
+        super.onPause()
+        searchProgress.clearAnimation()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

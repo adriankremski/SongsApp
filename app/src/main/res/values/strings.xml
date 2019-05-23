@@ -5,4 +5,5 @@
     <string name="all_songs">All songs</string>
     <string name="screen_title_songs">Songs</string>
     <string name="hint_search_songs">Type song name</string>
+    <string name="searching">Searching</string>
 </resources>
