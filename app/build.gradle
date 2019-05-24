@@ -55,6 +55,7 @@ dependencies {
     implementation mobileDependencies.koinAndroidScope
     implementation mobileDependencies.koinAndroidViewModel
     implementation mobileDependencies.kotlin
+    implementation mobileDependencies.glide
     implementation mobileDependencies.constraintLayout
     implementation mobileDependencies.navigationFragment
     implementation mobileDependencies.navigationUi

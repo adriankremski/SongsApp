@@ -1,11 +1,12 @@
 package com.github.snuffix.songapp.fragment.songs.adapter
 
+import android.content.Context
 import com.github.snuffix.songapp.recycler.SearchProgress
 import com.github.snuffix.songapp.recycler.SearchProgressAdapterDelegate
 import com.github.snuffix.songapp.utils.Constants
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 
-class SongsAdapter : ListDelegationAdapter<List<ViewItem>>() {
+class SongsAdapter() : ListDelegationAdapter<List<ViewItem>>() {
 
     private val progress = SearchProgress()
 
