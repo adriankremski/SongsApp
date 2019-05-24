@@ -34,30 +34,34 @@
                         android:layout_height="wrap_content"/>
             </androidx.appcompat.widget.Toolbar>
 
-            <FrameLayout
+            <com.github.snuffix.songapp.view.SearchProgressView
                     android:id="@+id/searchProgress"
+                    android:layout_margin="@dimen/spacing_medium"
                     android:visibility="gone"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <com.github.snuffix.songapp.view.EmptyListView
+                    android:id="@+id/emptyListMessage"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/spacing_medium"
+                    android:paddingEnd="@dimen/spacing_medium"
+                    android:paddingTop="@dimen/spacing_medium"
                     android:layout_height="wrap_content">
 
-                <TextView
-                        style="@style/ListSubtitle1"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginStart="@dimen/spacing_medium"
-                        android:gravity="center"
-                        android:drawablePadding="@dimen/spacing_normal"
-                        android:drawableStart="@drawable/ic_search"
-                        android:text="@string/searching"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
 
-                <ProgressBar
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_margin="@dimen/spacing_medium"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"/>
+            </com.github.snuffix.songapp.view.EmptyListView>
 
-            </FrameLayout>
+            <com.github.snuffix.songapp.view.ErrorView
+                    android:id="@+id/errorView"
+                    android:layout_width="match_parent"
+                    android:paddingStart="@dimen/spacing_medium"
+                    android:paddingEnd="@dimen/spacing_medium"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

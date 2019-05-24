@@ -12,4 +12,5 @@
     <dimen name="font_1x_large">20sp</dimen>
     <dimen name="font_2x_large">22sp</dimen>
     <dimen name="font_3x_large">24sp</dimen>
+    <dimen name="delimiterSize">0.5dp</dimen>
 </resources>

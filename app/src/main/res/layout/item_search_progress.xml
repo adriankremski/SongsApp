@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+       android:orientation="vertical"
+       tools:parentTag="android.widget.FrameLayout"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <TextView
+            style="@style/ListSubtitle1"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="center"
+            android:drawablePadding="@dimen/spacing_normal"
+            android:drawableStart="@drawable/ic_search"
+            android:text="@string/searching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ProgressBar
+            android:layout_gravity="right|center_vertical"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+
+</merge>

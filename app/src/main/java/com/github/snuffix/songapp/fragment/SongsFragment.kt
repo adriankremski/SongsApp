@@ -14,6 +14,7 @@ import com.github.snuffix.songapp.fragment.songs.adapter.SongsAdapter
 import com.github.snuffix.songapp.mapper.SongsMapper
 import com.github.snuffix.songapp.presentation.SearchMode
 import com.github.snuffix.songapp.presentation.SongsViewModel
+import com.github.snuffix.songapp.presentation.model.ErrorType
 import com.github.snuffix.songapp.recycler.decoration.VerticalSpaceItemDecoration
 import com.github.snuffix.songapp.utils.DebouncingQueryTextListener
 import com.github.snuffix.songapp.utils.RecyclerViewBottomScrollListener
@@ -89,11 +90,26 @@ class SongsFragment : BaseFragment() {
         }
 
         songsViewModel.songsData.observe(
+            onLoading = {
+                errorView.visibility = View.GONE
+                emptyListMessage.visibility = View.GONE
+            },
             onError = {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                errorView.visibility = View.VISIBLE
+
+                if (it.errorType == ErrorType.NETWORK) {
+                    errorView.networkError()
+                } else {
+                    errorView.error(it.message)
+                }
             },
             onSuccess = { resource ->
                 val items = resource.data.map { songsMapper.mapToUIModel(it) }
+
+                if (items.isEmpty()) {
+                    emptyListMessage.visibility = View.VISIBLE
+                }
+
                 songsAdapter.items = items
                 songsAdapter.notifyDataSetChanged()
             }

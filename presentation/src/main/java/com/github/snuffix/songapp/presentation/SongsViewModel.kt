@@ -34,6 +34,7 @@ open class SongsViewModel constructor(
     val songsData = songsResource.map { this }
     val showIncrementalProgress = incrementalProgress.map { this }
     val showSearchProgress = searchProgress.map { this }
+
     var searchMode: SearchMode by Delegates.observable(SearchMode.ALL_SONGS) { _, oldMode, newMode ->
         if (oldMode != newMode) {
             searchSongs(lastQuery, true)
@@ -51,6 +52,7 @@ open class SongsViewModel constructor(
             searchProgress.postValue(Event(true))
         }
 
+        songsResource.postValue(Resource.Loading())
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             val searchResult = when (searchMode) {

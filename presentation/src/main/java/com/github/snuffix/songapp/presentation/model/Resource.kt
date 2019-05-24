@@ -9,7 +9,7 @@ open class Resource<out T : Any> {
 
     class Loading<T : Any> : Resource<T>()
 
-    class Error<T : Any>(val message: String? = null, errorType: ErrorType? = null) : Resource<T>()
+    class Error<T : Any>(val message: String? = null, val errorType: ErrorType? = null) : Resource<T>()
 
     companion object {
         fun <T : Any> error(message: String? = null) = Resource.Error<T>(message, ErrorType.ERROR)
