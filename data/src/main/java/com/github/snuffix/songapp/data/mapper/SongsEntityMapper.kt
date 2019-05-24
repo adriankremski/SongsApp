@@ -8,8 +8,10 @@ open class SongsEntityMapper : EntityMapper<SongEntity, Song> {
         return Song(
             id = song.id,
             trackName = song.trackName,
+            releaseDate = song.releaseDate,
+            releaseYear = song.releaseYear,
             artistName = song.artistName,
-            releaseDate = song.releaseDate
+            imageUrl = song.imageUrl
         )
     }
 }

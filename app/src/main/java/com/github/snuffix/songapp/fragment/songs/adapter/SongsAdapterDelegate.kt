@@ -12,7 +12,8 @@ import java.text.DateFormat
 
 class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
 
-    override fun onBindViewHolder(items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>
+    override fun onBindViewHolder(
+        items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>
     ) {
         holder as SongItemHolder
         holder.bind(items[position] as Song)
@@ -29,7 +30,20 @@ class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
         fun bind(song: Song) {
             childView.trackNameLabel.text = song.trackName
             childView.artistNameLabel.text = song.artistName
-            childView.releaseDateLabel.text = DateFormat.getDateInstance().format(song.releaseDate.toDate())
+
+            val formattedDate = when {
+                song.releaseDate != null -> DateFormat.getDateInstance().format(song.releaseDate.toDate())
+                song.releaseYear != null -> song.releaseYear.toString()
+                else -> "----"
+            }
+
+            childView.releaseDateLabel.text = formattedDate
+
+            if (song.imageUrl != null) {
+
+            } else {
+
+            }
         }
     }
 }

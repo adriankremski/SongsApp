@@ -6,6 +6,8 @@ import org.joda.time.DateTime
 data class Song(
     val id: String,
     val artistName: String,
-    val releaseDate: DateTime,
+    val imageUrl: String? = null,
+    val releaseDate: DateTime? = null,
+    val releaseYear: Int? = null,
     val trackName: String
 ) : ViewItem

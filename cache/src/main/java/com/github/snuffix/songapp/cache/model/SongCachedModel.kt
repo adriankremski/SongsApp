@@ -10,5 +10,6 @@ data class SongCachedModel(
     @PrimaryKey
     val id: String,
     val trackName: String,
-    val artistName: String
+    val artistName: String,
+    val releaseYear: Int? = null
 )

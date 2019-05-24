@@ -9,7 +9,8 @@ open class RawSongsMapper : RawModelMapper<SongRawModel, SongCachedModel> {
         return SongCachedModel(
             id = UUID.randomUUID().toString(),
             trackName = model.trackName,
-            artistName = model.artistName
+            artistName = model.artistName,
+            releaseYear = model.releaseYear.toIntOrNull()
         )
     }
 }

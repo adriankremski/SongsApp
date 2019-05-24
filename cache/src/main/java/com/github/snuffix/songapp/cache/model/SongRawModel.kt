@@ -8,7 +8,7 @@ class SongRawModel(
     @SerializedName("Release Year") val releaseYear: String,
     @SerializedName("COMBINED") val COMBINED: String,
     @SerializedName("First?") val first: Int,
-    @SerializedName("Year?") val year: Int,
+    @SerializedName("Year?") val year: String,
     @SerializedName("PlayCount") val playCount: Int,
     @SerializedName("F*G") val fG: Int
 )

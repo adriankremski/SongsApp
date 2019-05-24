@@ -20,7 +20,7 @@ abstract class SongsDatabase constructor() : RoomDatabase() {
                     if (INSTANCE == null) {
                         INSTANCE = Room.databaseBuilder(
                             context.applicationContext, SongsDatabase::class.java, "songs.db"
-                        ).build()
+                        ).fallbackToDestructiveMigration().build()
                     }
                     return INSTANCE!!
                 }

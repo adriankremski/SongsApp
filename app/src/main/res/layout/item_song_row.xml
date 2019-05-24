@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        style="@style/CardView"
+        style="@style/AppCardView"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -10,40 +10,58 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                        android:orientation="vertical"
                                                        android:layout_width="match_parent"
-                                                       android:padding="@dimen/spacing_normal"
                                                        android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/trackImage"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_list_image_placeholder"
+                android:scaleType="fitXY"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
 
         <TextView
                 android:id="@+id/trackNameLabel"
                 style="@style/ListTitle"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:paddingTop="@dimen/spacing_normal"
+                app:layout_constraintBottom_toTopOf="@id/artistNameLabel"
+                app:layout_constraintStart_toEndOf="@id/trackImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/spacing_normal"
                 android:ellipsize="end"
                 android:lines="1"
-                tools:text="Lose Yourself"
+                tools:text="Lose Yourself is the best song ever"
                 android:layout_gravity="center"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/artistNameLabel"
                 style="@style/ListSubtitle1"
-                app:layout_constraintTop_toBottomOf="@id/trackNameLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                android:paddingTop="@dimen/spacing_normal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                app:layout_constraintStart_toEndOf="@id/trackImage"
                 tools:text="Eminem"
                 android:layout_gravity="center"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
 
         <TextView
                 style="@style/ListSubtitle2"
                 android:id="@+id/releaseDateLabel"
                 app:layout_constraintTop_toBottomOf="@id/artistNameLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                android:paddingTop="@dimen/spacing_normal"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                app:layout_constraintStart_toEndOf="@id/trackImage"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="25 Mar 2000"
                 android:layout_gravity="center"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

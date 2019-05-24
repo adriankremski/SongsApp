@@ -6,5 +6,7 @@ class SongView(
     val id: String,
     val trackName: String,
     val artistName: String,
-    val releaseDate: Date
+    val imageUrl: String? = null,
+    val releaseDate: Date? = null,
+    val releaseYear: Int? = null
 )

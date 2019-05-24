@@ -10,6 +10,8 @@ open class SongsMapper : ViewMapper<SongView, Song> {
         id = song.id,
         trackName = song.trackName,
         artistName = song.artistName,
-        releaseDate = DateTime(song.releaseDate)
+        imageUrl = song.imageUrl,
+        releaseDate = if (song.releaseDate != null) DateTime(song.releaseDate) else null,
+        releaseYear = song.releaseYear
     )
 }

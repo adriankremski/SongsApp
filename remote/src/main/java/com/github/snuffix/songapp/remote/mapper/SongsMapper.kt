@@ -11,7 +11,8 @@ open class SongsMapper : ModelMapper<SongModel, SongEntity> {
             id = model.trackId.toString(),
             trackName = model.trackName,
             artistName = model.artistName,
-            releaseDate = DateTime(model.releaseDate).toDate()
+            releaseDate = DateTime(model.releaseDate).toDate(),
+            imageUrl = model.artworkUrl100
         )
     }
 }

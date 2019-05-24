@@ -14,21 +14,21 @@
         <item name="layout_scrollFlags">scroll|enterAlways</item>
     </style>
 
-    <style name="CardView" parent="Widget.MaterialComponents.CardView">
+    <style name="AppCardView" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="cardUseCompatPadding">true</item>
     </style>
 
     <style name="ListTitle" parent="TextAppearance.AppCompat.Title">
-
+        <item name="android:textSize">@dimen/font_large</item>
     </style>
 
     <style name="ListSubtitle1" parent="TextAppearance.AppCompat.Body1">
-
+        <item name="android:textSize">@dimen/font_medium</item>
     </style>
 
     <style name="ListSubtitle2" parent="TextAppearance.AppCompat.Body2">
-
+        <item name="android:textSize">@dimen/font_small</item>
     </style>
 </resources>
