@@ -25,17 +25,15 @@ open class SongsViewModel constructor(
 
     private val songs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
-    private val searchProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    private val incrementalProgress: MutableLiveData<Event<Boolean>> = MutableLiveData()
+
     private var hasMoreSongs = true
     private var currentJob: Job? = null
     private var lastQuery = ""
+    var isIncrementalSearch = false
 
     val songsData = songsResource.map { this }
-    val showIncrementalProgress = incrementalProgress.map { this }
-    val showSearchProgress = searchProgress.map { this }
 
-    var searchMode: SearchMode by Delegates.observable(SearchMode.ALL_SONGS) { _, oldMode, newMode ->
+    var searchMode: SearchSource by Delegates.observable(SearchSource.ALL_SONGS) { _, oldMode, newMode ->
         if (oldMode != newMode) {
             searchSongs(lastQuery, true)
         }
@@ -48,27 +46,24 @@ open class SongsViewModel constructor(
 
         songs.clear()
 
-        if (searchMode != SearchMode.LOCAL_SONGS) {
-            searchProgress.postValue(Event(true))
+        isIncrementalSearch = false
+
+        if (searchMode != SearchSource.LOCAL_SONGS) {
+            songsResource.postValue(Resource.Loading())
         }
 
-        songsResource.postValue(Resource.Loading())
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             val searchResult = when (searchMode) {
-                SearchMode.ALL_SONGS -> searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0))
-                SearchMode.ITUNES_SONGS -> searchRemoteSongs.execute(SearchRemoteSongs.Params.create(lastQuery, 0))
-                SearchMode.LOCAL_SONGS -> searchLocalSongs.execute(SearchLocalSongs.Params.create(lastQuery, 0))
+                SearchSource.ALL_SONGS -> searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0))
+                SearchSource.ITUNES_SONGS -> searchRemoteSongs.execute(SearchRemoteSongs.Params.create(lastQuery, 0))
+                SearchSource.LOCAL_SONGS -> searchLocalSongs.execute(SearchLocalSongs.Params.create(lastQuery, 0))
             }
 
             searchResult.whenOk {
                 handleSearchSuccess(this)
             }.whenError {
                 handleSearchError(this)
-            }
-
-            if (searchMode != SearchMode.LOCAL_SONGS) {
-                searchProgress.postValue(Event(false))
             }
         }
     }
@@ -87,7 +82,7 @@ open class SongsViewModel constructor(
             errorResult is Result.NetworkError -> {
                 songsResource.postValue(Resource.networkError())
             }
-            errorResult is Result.Error -> {
+            else -> {
                 songsResource.postValue(Resource.error(message = "Oops, something went wrong"))
             }
         }
@@ -98,20 +93,24 @@ open class SongsViewModel constructor(
 
         if (!hasMoreSongs || searchInProgress) return
 
-        incrementalProgress.postValue(Event(true))
+        if (searchMode != SearchSource.LOCAL_SONGS) {
+            songsResource.postValue(Resource.Loading())
+        }
+
+        isIncrementalSearch = true
 
         currentJob = viewModelScope.launch {
             val searchResult = when (searchMode) {
-                SearchMode.ALL_SONGS -> {
+                SearchSource.ALL_SONGS -> {
                     //TODO ALL_SONGS -- OFFSET
                     val params = SearchAllSongs.Params.create(lastQuery, songs.size)
                     searchAllSongs.execute(params)
                 }
-                SearchMode.ITUNES_SONGS -> {
+                SearchSource.ITUNES_SONGS -> {
                     val params = SearchRemoteSongs.Params.create(lastQuery, songs.size)
                     searchRemoteSongs.execute(params)
                 }
-                SearchMode.LOCAL_SONGS -> {
+                SearchSource.LOCAL_SONGS -> {
                     val params = SearchLocalSongs.Params.create(lastQuery, songs.size)
                     searchLocalSongs.execute(params)
                 }
@@ -119,9 +118,9 @@ open class SongsViewModel constructor(
 
             searchResult.whenOk {
                 handleSearchSuccess(this)
+            }.whenError {
+                handleSearchError(this)
             }
-
-            incrementalProgress.postValue(Event(false))
         }
     }
 
@@ -129,6 +128,6 @@ open class SongsViewModel constructor(
 }
 
 
-enum class SearchMode {
+enum class SearchSource {
     ITUNES_SONGS, LOCAL_SONGS, ALL_SONGS
 }

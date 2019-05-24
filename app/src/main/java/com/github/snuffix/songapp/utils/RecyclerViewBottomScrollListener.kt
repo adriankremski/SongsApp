@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Helper class for notyfying listener that bottom of recyclerView was reached
+ * Helper class for notifying listener that bottom of recyclerView was reached
  */
 class RecyclerViewBottomScrollListener(
     private val layoutManager: LinearLayoutManager,

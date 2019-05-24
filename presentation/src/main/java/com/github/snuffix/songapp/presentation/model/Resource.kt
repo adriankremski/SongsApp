@@ -9,12 +9,12 @@ open class Resource<out T : Any> {
 
     class Loading<T : Any> : Resource<T>()
 
-    class Error<T : Any>(val message: String? = null, val errorType: ErrorType? = null) : Resource<T>()
+    class Error<T : Any>(val message: String? = null, val errorType: ErrorType) : Resource<T>()
 
     companion object {
-        fun <T : Any> error(message: String? = null) = Resource.Error<T>(message, ErrorType.ERROR)
-        fun <T : Any> networkError(message: String? = null) = Resource.Error<T>(message, ErrorType.NETWORK)
-        fun <T : Any> apiError(message: String? = null) = Resource.Error<T>(message, ErrorType.API)
+        fun <T : Any> error(message: String? = null) = Error<T>(message, ErrorType.ERROR)
+        fun <T : Any> networkError(message: String? = null) = Error<T>(message, ErrorType.NETWORK)
+        fun <T : Any> apiError(message: String? = null) = Error<T>(message, ErrorType.API)
     }
 }
 

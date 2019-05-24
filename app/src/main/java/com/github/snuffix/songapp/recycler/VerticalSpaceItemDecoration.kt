@@ -1,4 +1,4 @@
-package com.github.snuffix.songapp.recycler.decoration
+package com.github.snuffix.songapp.recycler
 
 import android.graphics.Rect
 import android.view.View

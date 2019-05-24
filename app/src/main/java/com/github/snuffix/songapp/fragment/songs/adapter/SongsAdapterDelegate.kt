@@ -16,11 +16,9 @@ import java.text.DateFormat
 import com.bumptech.glide.request.RequestOptions
 
 
-class SongsAdapterDelegate() : AdapterDelegate<List<ViewItem>>() {
+class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
 
-    override fun onBindViewHolder(
-        items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>
-    ) {
+    override fun onBindViewHolder(items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>) {
         holder as SongItemHolder
         holder.bind(items[position] as Song)
     }
