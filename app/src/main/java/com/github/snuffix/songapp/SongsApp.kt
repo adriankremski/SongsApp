@@ -1,6 +1,8 @@
 package com.github.snuffix.songapp
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
 import com.github.snuffix.songapp.cache.SongsLocalSourceImpl
 import com.github.snuffix.songapp.cache.db.SongsDatabase
 import com.github.snuffix.songapp.cache.mapper.CachedSongsMapper
@@ -19,7 +21,9 @@ import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
 import com.github.snuffix.songapp.remote.mapper.SongsMapper
 import com.github.snuffix.songapp.remote.service.ITunesSongServiceFactory
+import com.github.snuffix.songapp.remote.service.NetworkCheck
 import net.danlew.android.joda.JodaTimeAndroid
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -27,7 +31,6 @@ import org.koin.dsl.module
 import org.koin.experimental.builder.singleBy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-
 
 
 @SuppressWarnings("unused")
@@ -60,8 +63,19 @@ val cacheModule = module {
 }
 
 val remoteModule = module {
+    single<NetworkCheck> {
+        object : NetworkCheck {
+            val connectivityManager = androidApplication().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+            override fun isOnline(): Boolean {
+                val netInfo = connectivityManager.activeNetworkInfo
+                return (netInfo != null && netInfo.isConnected)
+            }
+        }
+    }
+
     single { SongsMapper() }
-    single { ITunesSongServiceFactory.makeService(BuildConfig.DEBUG) }
+    single { ITunesSongServiceFactory.makeService(BuildConfig.DEBUG, get()) }
     singleBy<SongsRemoteSource, SongsRemoteSourceImpl>()
 }
 

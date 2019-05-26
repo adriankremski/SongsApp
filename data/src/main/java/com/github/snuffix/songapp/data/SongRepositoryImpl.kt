@@ -1,6 +1,7 @@
 package com.github.snuffix.songapp.data
 
 import com.github.snuffix.songapp.data.mapper.SongsEntityMapper
+import com.github.snuffix.songapp.data.repository.NoConnectivityException
 import com.github.snuffix.songapp.data.repository.RemoteException
 import com.github.snuffix.songapp.data.repository.SongsLocalSource
 import com.github.snuffix.songapp.data.repository.SongsRemoteSource
@@ -42,6 +43,8 @@ suspend fun <T : Any> getResult(sourceCall: suspend () -> T): Result<T> {
         Result.Ok(sourceCall())
     } catch (exception: CancellationException) {
         Result.CancelledError()
+    } catch (exception: NoConnectivityException) {
+        Result.NetworkError(exception = exception)
     } catch (exception: UnknownHostException) {
         Result.NetworkError(exception = exception)
     } catch (exception: ConnectException) {
