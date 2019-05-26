@@ -1,19 +1,17 @@
 package com.github.snuffix.songapp.fragment.songs.adapter
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.github.snuffix.songapp.R
-import com.github.snuffix.songapp.extensions.drawableCompat
 import com.github.snuffix.songapp.extensions.inflateView
 import com.github.snuffix.songapp.model.Song
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import kotlinx.android.synthetic.main.item_song_row.view.*
 import java.text.DateFormat
-import com.bumptech.glide.request.RequestOptions
 
 
 class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {

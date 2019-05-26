@@ -8,13 +8,13 @@
     <ImageView
             android:id="@+id/errorImage"
             android:layout_width="24dp"
-            android:src="@drawable/ic_network_error"
+            android:contentDescription="@null"
             android:layout_height="24dp"/>
 
     <TextView
             android:id="@+id/errorMessageLabel"
             style="@style/ListSubtitle1"
-            android:layout_gravity="left|center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:gravity="center"
             android:layout_marginStart="@dimen/spacing_normal"
             app:layout_constraintTop_toTopOf="@id/errorImage"

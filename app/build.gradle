@@ -50,6 +50,7 @@ dependencies {
     implementation project(':cache')
 
     implementation mobileDependencies.koinCore
+    implementation mobileDependencies.timber
     implementation mobileDependencies.koinCoreExt
     implementation mobileDependencies.koinAndroid
     implementation mobileDependencies.koinAndroidScope

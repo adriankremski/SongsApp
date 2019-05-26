@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="mediumAnimationTime">@android:integer/config_mediumAnimTime</integer>
+</resources>

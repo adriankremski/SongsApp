@@ -5,6 +5,7 @@ package com.github.snuffix.songapp.presentation.model
  * When using livedata for passing events, sometimes we want them to be handled only once (this class
  * helps with such use case)
  */
+@SuppressWarnings("unused")
 open class Event<out T>(private val content: T) {
 
     var hasBeenHandled = false

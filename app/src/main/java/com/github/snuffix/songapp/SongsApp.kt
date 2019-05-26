@@ -25,13 +25,22 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.experimental.builder.singleBy
+import timber.log.Timber
+import timber.log.Timber.DebugTree
 
+
+
+@SuppressWarnings("unused")
 class SongsApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         JodaTimeAndroid.init(this)
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        }
 
         startKoin {
             // Android context

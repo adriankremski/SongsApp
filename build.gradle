@@ -5,10 +5,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0-beta01'
+        classpath 'com.android.tools.build:gradle:3.5.0-beta02'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,7 +18,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -43,6 +42,7 @@ ext {
     koinVersion = "2.0.0-GA6"
     roomVersion = '2.1.0-alpha04'
     navVersion = "2.0.0"
+    glideVersion = '4.0.0'
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -54,7 +54,7 @@ ext {
     lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     lifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
-    glideVersion = '4.0.0'
+    timber = "com.jakewharton.timber:timber:4.7.1"
 
     mobileDependencies = [
             koinCore            : "org.koin:koin-core:$koinVersion",
@@ -67,6 +67,7 @@ ext {
             navigationUi        : "androidx.navigation:navigation-ui-ktx:$navVersion",
             adapterDelegates    : 'com.hannesdorfmann:adapterdelegates4:4.0.0',
             glide               : "com.github.bumptech.glide:glide:$glideVersion",
+            timber              : timber,
             kotlin              : kotlin,
             lifecycleRuntime    : lifecycleRuntime,
             lifecycleExtensions : lifecycleExtensions,
@@ -78,12 +79,12 @@ ext {
 
     presentationDependencies = [
             lifecycleViewModel : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            timber             : timber,
             kotlin             : kotlin,
             lifecycleExtensions: lifecycleExtensions,
             coroutinesCore     : coroutinesCore,
             coroutinesAndroid  : coroutinesAndroid,
             lifecycleRuntime   : lifecycleRuntime,
-            lifecycleExtensions: lifecycleExtensions,
             lifecycleCompiler  : lifecycleCompiler
     ]
 

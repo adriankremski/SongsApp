@@ -7,7 +7,7 @@
 
     <TextView
             style="@style/ListSubtitle1"
-            android:layout_gravity="left|center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:gravity="center"
             android:drawablePadding="@dimen/spacing_normal"
             android:drawableStart="@drawable/ic_search"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"/>
 
     <ProgressBar
-            android:layout_gravity="right|center_vertical"
+            android:layout_gravity="end|center_vertical"
             android:layout_width="24dp"
             android:layout_height="24dp"/>
 

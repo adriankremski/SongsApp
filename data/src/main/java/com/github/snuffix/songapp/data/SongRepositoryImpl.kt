@@ -24,7 +24,7 @@ open class SongRepositoryImpl constructor(
         val result = getResult { remoteSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
 
         return result.whenOkReturn { songs ->
-            songs.map { mapper.mapFromEntity(it) }
+            songs.map { mapper.mapFromEntity(it, isFromRemote = true) }
         }
     }
 
@@ -32,7 +32,7 @@ open class SongRepositoryImpl constructor(
         val result = getResult { localSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
 
         return result.whenOkReturn { songs ->
-            songs.map { mapper.mapFromEntity(it) }
+            songs.map { mapper.mapFromEntity(it, isFromRemote = false) }
         }
     }
 }

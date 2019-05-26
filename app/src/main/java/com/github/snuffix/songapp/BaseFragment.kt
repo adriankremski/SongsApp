@@ -6,17 +6,6 @@ import androidx.lifecycle.Observer
 import com.github.snuffix.songapp.presentation.model.Resource
 
 abstract class BaseFragment : Fragment() {
-    fun <T : Any?> LiveData<T>.observe(onChanged: (T) -> Unit = {}) {
-        observe(viewLifecycleOwner, Observer<T> {
-            onChanged(it)
-        })
-    }
-
-    fun <T : Any?> LiveData<T?>.observeNullable(onChanged: (T?) -> Unit = {}) {
-        observe(viewLifecycleOwner, Observer {
-            onChanged(it)
-        })
-    }
 
     fun <T : Any> LiveData<Resource<T>>.observe(
         onLoading: () -> Unit = {},

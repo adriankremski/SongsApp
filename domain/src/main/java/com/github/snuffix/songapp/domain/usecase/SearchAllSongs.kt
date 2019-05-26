@@ -11,8 +11,8 @@ open class SearchAllSongs constructor(private val songsRepository: SongsReposito
     override suspend fun buildUseCase(params: Params?): Result<List<Song>> {
         if (params == null) throw IllegalArgumentException("Params can't be null!")
 
-        val remoteSongs = songsRepository.getRemoteSongs(params.query, params.offset)
-        val localSongs = songsRepository.getLocalSongs(params.query, params.offset)
+        val remoteSongs = songsRepository.getRemoteSongs(params.query, params.remoteSongsOffset)
+        val localSongs = songsRepository.getLocalSongs(params.query, params.localSongsOffset)
 
         val combinedResult = CombinedResult(remoteSongs, localSongs)
 
@@ -26,10 +26,10 @@ open class SearchAllSongs constructor(private val songsRepository: SongsReposito
         }
     }
 
-    data class Params constructor(val query: String, val offset: Int) {
+    data class Params constructor(val query: String, val remoteSongsOffset: Int, val localSongsOffset: Int) {
         companion object {
-            fun create(query: String, offset: Int): Params {
-                return Params(query, offset)
+            fun create(query: String, remoteSongsOffset: Int, localSongsOffset: Int): Params {
+                return Params(query, remoteSongsOffset, localSongsOffset)
             }
         }
     }

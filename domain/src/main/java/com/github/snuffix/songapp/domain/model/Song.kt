@@ -8,5 +8,6 @@ class Song(
     val releaseDate: Date? = null,
     val releaseYear: Int? = null,
     val imageUrl: String? = null,
+    val isFromRemote: Boolean,
     val artistName: String
 )

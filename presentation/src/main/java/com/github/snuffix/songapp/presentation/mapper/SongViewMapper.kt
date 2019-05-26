@@ -9,9 +9,10 @@ open class SongViewMapper : Mapper<SongView, Song> {
             id = song.id,
             trackName = song.trackName,
             artistName = song.artistName,
-            releaseDate = song.releaseDate,
             imageUrl = song.imageUrl,
-            releaseYear = song.releaseYear
+            releaseDate = song.releaseDate,
+            releaseYear = song.releaseYear,
+            isFromRemote = song.isFromRemote
         )
     }
 }

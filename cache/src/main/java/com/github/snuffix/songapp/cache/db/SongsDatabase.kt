@@ -8,7 +8,7 @@ import com.github.snuffix.songapp.cache.model.SongCachedModel
 
 
 @Database(entities = [SongCachedModel::class], version = 1)
-abstract class SongsDatabase constructor() : RoomDatabase() {
+abstract class SongsDatabase : RoomDatabase() {
     abstract fun cachedSongsDao(): CachedSongsDao
 
     companion object {

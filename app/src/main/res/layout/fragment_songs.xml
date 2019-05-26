@@ -62,7 +62,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.github.snuffix.songapp.view.SongsRecyclerView
                 android:id="@+id/songsRecycler"
                 android:descendantFocusability="beforeDescendants"
                 android:background="@android:color/background_light"

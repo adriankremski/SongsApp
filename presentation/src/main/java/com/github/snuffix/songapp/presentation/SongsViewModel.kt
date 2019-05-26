@@ -9,11 +9,11 @@ import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
 import com.github.snuffix.songapp.presentation.extensions.map
 import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
-import com.github.snuffix.songapp.presentation.model.Event
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.properties.Delegates
 
 open class SongsViewModel constructor(
@@ -55,9 +55,18 @@ open class SongsViewModel constructor(
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             val searchResult = when (searchMode) {
-                SearchSource.ALL_SONGS -> searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0))
-                SearchSource.ITUNES_SONGS -> searchRemoteSongs.execute(SearchRemoteSongs.Params.create(lastQuery, 0))
-                SearchSource.LOCAL_SONGS -> searchLocalSongs.execute(SearchLocalSongs.Params.create(lastQuery, 0))
+                SearchSource.ALL_SONGS -> {
+                    Timber.d("Fetching local songs with offset 0, and remote with offset 0")
+                    searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0, 0))
+                }
+                SearchSource.REMOTE_SONGS -> {
+                    Timber.d("Fetching remote songs with offset 0")
+                    searchRemoteSongs.execute(SearchRemoteSongs.Params.create(lastQuery, 0))
+                }
+                SearchSource.LOCAL_SONGS -> {
+                    Timber.d("Fetching local songs with offset 0")
+                    searchLocalSongs.execute(SearchLocalSongs.Params.create(lastQuery, 0))
+                }
             }
 
             searchResult.whenOk {
@@ -102,16 +111,23 @@ open class SongsViewModel constructor(
         currentJob = viewModelScope.launch {
             val searchResult = when (searchMode) {
                 SearchSource.ALL_SONGS -> {
-                    //TODO ALL_SONGS -- OFFSET
-                    val params = SearchAllSongs.Params.create(lastQuery, songs.size)
+                    val localSongsOffset = songs.count { !it.isFromRemote }
+                    val remoteSongsOffset = songs.size - localSongsOffset
+
+                    Timber.d("Fetching local songs with offset $localSongsOffset, and remote with offset $remoteSongsOffset")
+                    val params = SearchAllSongs.Params.create(lastQuery, localSongsOffset = localSongsOffset, remoteSongsOffset = remoteSongsOffset)
                     searchAllSongs.execute(params)
                 }
-                SearchSource.ITUNES_SONGS -> {
-                    val params = SearchRemoteSongs.Params.create(lastQuery, songs.size)
+                SearchSource.REMOTE_SONGS -> {
+                    val offset = songs.size
+                    Timber.d("Fetching remote songs with offset $offset")
+                    val params = SearchRemoteSongs.Params.create(lastQuery, offset)
                     searchRemoteSongs.execute(params)
                 }
                 SearchSource.LOCAL_SONGS -> {
-                    val params = SearchLocalSongs.Params.create(lastQuery, songs.size)
+                    val offset = songs.size
+                    Timber.d("Fetching local songs with offset $offset")
+                    val params = SearchLocalSongs.Params.create(lastQuery, offset)
                     searchLocalSongs.execute(params)
                 }
             }
@@ -129,5 +145,5 @@ open class SongsViewModel constructor(
 
 
 enum class SearchSource {
-    ITUNES_SONGS, LOCAL_SONGS, ALL_SONGS
+    REMOTE_SONGS, LOCAL_SONGS, ALL_SONGS
 }
