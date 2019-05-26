@@ -12,7 +12,7 @@ object SongDataFactory {
         return Random().nextInt()
     }
 
-    fun makeSongsResponse(songs: List<SongModel>)  = SongsResponse(songs)
+    fun makeSongsResponse(songs: List<SongModel>) = SongsResponse(songs)
 
 
     fun makeSongModel(): SongModel {
@@ -25,11 +25,5 @@ object SongDataFactory {
         )
     }
 
-    fun makeSongsList(count: Int): List<SongModel> {
-        val songs = mutableListOf<SongModel>()
-        repeat(count) {
-            songs.add(makeSongModel())
-        }
-        return songs
-    }
+    fun makeSongsList(count: Int) = List(count) { makeSongModel() }
 }

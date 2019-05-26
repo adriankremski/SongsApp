@@ -24,11 +24,5 @@ object SongDataFactory {
         )
     }
 
-    fun makeSongsList(count: Int, isFromRemote: Boolean): List<Song> {
-        val songs = mutableListOf<Song>()
-        repeat(count) {
-            songs.add(makeSong(isFromRemote))
-        }
-        return songs
-    }
+    fun makeSongsList(count: Int, isFromRemote: Boolean) = List(count) { makeSong(isFromRemote) }
 }

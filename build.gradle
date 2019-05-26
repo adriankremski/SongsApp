@@ -51,6 +51,8 @@ ext {
     mockitoAndroidVersion = '2.18.3'
     robolectricVersion = '3.4.2'
     archCompVersion = '2.0.0-alpha1'
+    androidRunnerVersion = '1.1.1'
+    androidRulesVersion = '1.1.1'
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -162,5 +164,19 @@ ext {
             kotlin           : kotlin,
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid
+    ]
+
+    cacheTestDependencies = [
+            junit              : junit,
+            mockito            : mockito,
+            assertj            : assertj,
+            robolectric        : "org.robolectric:robolectric:$robolectricVersion",
+            roomTesting        : "androidx.room:room-testing:$roomVersion",
+            archTesting        : "androidx.arch.core:core-testing:$archCompVersion",
+            androidRunner      : "androidx.test:runner:$androidRunnerVersion",
+            androidRules       : "androidx.test:rules:$androidRulesVersion",
+            lifecycleRuntime   : lifecycleRuntime,
+            lifecycleExtensions: lifecycleExtensions,
+            lifecycleCompiler  : lifecycleCompiler,
     ]
 }

@@ -22,11 +22,5 @@ object SongDataFactory {
         )
     }
 
-    fun makeSongsList(count: Int): List<SongEntity> {
-        val songs = mutableListOf<SongEntity>()
-        repeat(count) {
-            songs.add(makeSongEntity())
-        }
-        return songs
-    }
+    fun makeSongsList(count: Int) = List(count) { makeSongEntity() }
 }
