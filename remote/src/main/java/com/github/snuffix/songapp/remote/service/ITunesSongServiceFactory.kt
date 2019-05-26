@@ -2,17 +2,20 @@ package com.github.snuffix.songapp.remote.service
 
 import com.github.snuffix.songapp.data.repository.NoConnectivityException
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import okhttp3.CacheControl
+import java.io.File
 
 
 object ITunesSongServiceFactory {
-    fun makeService(isDebug: Boolean, networkCheck: NetworkCheck): ITunesSongsService {
-        val okHttpClient = makeOkHttpClient(networkCheck, makeLoggingInterceptor((isDebug)))
+    fun makeService(cacheDir: File, isDebug: Boolean, networkCheck: NetworkCheck): ITunesSongsService {
+        val okHttpClient = makeOkHttpClient(cacheDir, networkCheck, makeLoggingInterceptor((isDebug)))
         return makeService(okHttpClient)
     }
 
@@ -28,9 +31,12 @@ object ITunesSongServiceFactory {
         return retrofit.create(ITunesSongsService::class.java)
     }
 
-    private fun makeOkHttpClient(networkCheck: NetworkCheck, httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    private fun makeOkHttpClient(cacheDir: File, networkCheck: NetworkCheck, httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        val cacheSize = 10 * 1024 * 1024
+
         return OkHttpClient.Builder()
             .addInterceptor(makeNetworkCheckInterceptor(networkCheck))
+            .cache(Cache(cacheDir, cacheSize.toLong()))
             .addInterceptor(httpLoggingInterceptor)
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
@@ -38,11 +44,14 @@ object ITunesSongServiceFactory {
     }
 
     private fun makeNetworkCheckInterceptor(networkCheck: NetworkCheck): Interceptor = Interceptor { chain ->
+        val builder = chain.request().newBuilder()
+
         if (!networkCheck.isOnline()) {
+//            builder.cacheControl(CacheControl.FORCE_CACHE)
             throw NoConnectivityException()
         }
 
-        chain.proceed(chain.request())
+        chain.proceed(builder.build())
     }
 
     private fun makeLoggingInterceptor(isDebug: Boolean): HttpLoggingInterceptor {
