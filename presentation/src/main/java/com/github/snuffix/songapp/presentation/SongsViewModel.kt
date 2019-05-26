@@ -1,5 +1,6 @@
 package com.github.snuffix.songapp.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.snuffix.songapp.domain.model.Result
@@ -17,6 +18,7 @@ import timber.log.Timber
 import kotlin.properties.Delegates
 
 open class SongsViewModel constructor(
+    private val startSearchSource: SearchSource = SearchSource.ALL_SONGS,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
@@ -31,9 +33,9 @@ open class SongsViewModel constructor(
     private var lastQuery = ""
     var isIncrementalSearch = false
 
-    val songsData = songsResource.map { this }
+    fun songsData(): LiveData<Resource<List<SongView>>> = songsResource
 
-    var searchMode: SearchSource by Delegates.observable(SearchSource.ALL_SONGS) { _, oldMode, newMode ->
+    var searchSource: SearchSource by Delegates.observable(startSearchSource) { _, oldMode, newMode ->
         if (oldMode != newMode) {
             searchSongs(lastQuery, true)
         }
@@ -48,13 +50,13 @@ open class SongsViewModel constructor(
 
         isIncrementalSearch = false
 
-        if (searchMode != SearchSource.LOCAL_SONGS) {
+        if (searchSource != SearchSource.LOCAL_SONGS) {
             songsResource.postValue(Resource.Loading())
         }
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            val searchResult = when (searchMode) {
+            val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
                     searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0, 0))
@@ -102,14 +104,14 @@ open class SongsViewModel constructor(
 
         if (!hasMoreSongs || searchInProgress) return
 
-        if (searchMode != SearchSource.LOCAL_SONGS) {
+        if (searchSource != SearchSource.LOCAL_SONGS) {
             songsResource.postValue(Resource.Loading())
         }
 
         isIncrementalSearch = true
 
         currentJob = viewModelScope.launch {
-            val searchResult = when (searchMode) {
+            val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     val localSongsOffset = songs.count { !it.isFromRemote }
                     val remoteSongsOffset = songs.size - localSongsOffset

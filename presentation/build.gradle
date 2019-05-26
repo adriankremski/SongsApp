@@ -70,5 +70,12 @@ dependencies {
     implementation presentationDependencies.lifecycleExtensions
     implementation presentationDependencies.lifecycleViewModel
 
+    testImplementation presentationTestDependencies.coroutinesTest
+    testImplementation presentationTestDependencies.junit
+    testImplementation presentationTestDependencies.mockito
+    testImplementation presentationTestDependencies.assertj
+    testImplementation presentationTestDependencies.robolectric
+    testImplementation presentationTestDependencies.archTesting
+
     kapt presentationDependencies.lifecycleCompiler
 }

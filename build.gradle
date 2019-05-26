@@ -49,6 +49,8 @@ ext {
     espressoVersion = '3.1.0'
     mockitoVersion = '2.18.3'
     mockitoAndroidVersion = '2.18.3'
+    robolectricVersion = '3.4.2'
+    archCompVersion = '2.0.0-alpha1'
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -95,6 +97,17 @@ ext {
             coroutinesAndroid  : coroutinesAndroid,
             lifecycleRuntime   : lifecycleRuntime,
             lifecycleCompiler  : lifecycleCompiler
+    ]
+
+    presentationTestDependencies = [
+            junit            : junit,
+            mockito          : mockito,
+            assertj          : assertj,
+            coroutinesCore   : coroutinesCore,
+            coroutinesAndroid: coroutinesAndroid,
+            coroutinesTest   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion",
+            robolectric      : "org.robolectric:robolectric:$robolectricVersion",
+            archTesting      : "androidx.arch.core:core-testing:$archCompVersion"
     ]
 
     domainDependencies = [

@@ -68,7 +68,7 @@ class SongsFragment : BaseFragment() {
     }
 
     private fun subscribeToSongs() {
-        songsViewModel.songsData.observe(
+        songsViewModel.songsData().observe(
             onLoading = {
                 errorView.visibility = View.GONE
                 emptyView.visibility = View.GONE
@@ -135,7 +135,7 @@ class SongsFragment : BaseFragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
-        val selectedItemId = searchModeToIdMapping.entries.first { it.value == songsViewModel.searchMode }.key
+        val selectedItemId = searchModeToIdMapping.entries.first { it.value == songsViewModel.searchSource }.key
         menu?.findItem(selectedItemId)?.isChecked = true
         super.onPrepareOptionsMenu(menu)
     }
@@ -146,7 +146,7 @@ class SongsFragment : BaseFragment() {
         }
 
         return if (searchModeToIdMapping.containsKey(item.itemId)) {
-            songsViewModel.searchMode = searchModeToIdMapping.getValue(item.itemId)
+            songsViewModel.searchSource = searchModeToIdMapping.getValue(item.itemId)
             true
         } else {
             super.onOptionsItemSelected(item)
