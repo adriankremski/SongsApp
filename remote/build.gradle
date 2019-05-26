@@ -6,6 +6,7 @@ targetCompatibility = "7"
 
 dependencies {
     def remoteDependencies = rootProject.ext.remoteDependencies
+    def remoteTestDependencies = rootProject.ext.remoteTestDependencies
 
     implementation project(':data')
 
@@ -18,4 +19,9 @@ dependencies {
     implementation remoteDependencies.retrofit
     implementation remoteDependencies.retrofitConverter
     implementation remoteDependencies.jodaTime
+
+    testImplementation remoteTestDependencies.junit
+    testImplementation remoteTestDependencies.mockito
+    testImplementation remoteTestDependencies.assertj
+    testImplementation remoteTestDependencies.jodaTime
 }

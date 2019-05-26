@@ -134,6 +134,13 @@ ext {
             gson                     : gson,
     ]
 
+    remoteTestDependencies = [
+            junit   : junit,
+            mockito : mockito,
+            assertj : assertj,
+            jodaTime: 'joda-time:joda-time:2.10.2'
+    ]
+
     cacheDependencies = [
             roomRuntime      : "androidx.room:room-runtime:${roomVersion}",
             roomCompiler     : "androidx.room:room-compiler:${roomVersion}",
