@@ -23,7 +23,7 @@ class SongsRepositoryTest {
     private val mapper = SongsEntityMapper()
     private val remote = mock<SongsRemoteSource>()
     private val local = mock<SongsLocalSource>()
-    val repository = SongsRepositoryImpl(mapper, remote, local)
+    private val repository = SongsRepositoryImpl(mapper, remote, local)
 
     @Before
     fun setup() {
@@ -44,18 +44,18 @@ class SongsRepositoryTest {
         }
     }
 
-    inline fun <reified CallResult : Result<*>> assertGetRemoteSongsThrowsException(exception: Exception) {
+    private inline fun <reified CallResult : Result<*>> assertGetRemoteSongsThrowsException(exception: Exception) {
         runBlocking {
             val query = "Test"
             val offset = 0
 
             stubGetRemoteSongsThrowsException(exception)
-            var result = repository.getRemoteSongs(query, offset)
+            val result = repository.getRemoteSongs(query, offset)
             assert(result is CallResult)
         }
     }
 
-    fun stubGetRemoteSongsThrowsException(exception: Exception) {
+    private fun stubGetRemoteSongsThrowsException(exception: Exception) {
         runBlocking {
             whenever(remote.getSongs(any(), any(), any())).thenAnswer { throw exception }
         }

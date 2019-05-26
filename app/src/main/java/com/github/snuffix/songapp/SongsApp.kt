@@ -92,7 +92,7 @@ val domainModule = module {
 
 val presentationModule = module {
     single { SongViewMapper() }
-    viewModel { SongsViewModel(get(), get(), get(), get()) }
+    viewModel { SongsViewModel(searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
 }
 
 val uiModule = module {

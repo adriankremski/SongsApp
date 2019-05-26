@@ -23,6 +23,4 @@ class SongsAdapter : ListDelegationAdapter<List<ViewItem>>() {
     fun showIncrementalProgress(show: Boolean) {
         progress.show = show
     }
-
-    fun isEmpty() = items.isEmpty()
 }

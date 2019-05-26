@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface ITunesSongsService {
     @GET("search?entity=song&media=music&attribute=songTerm")
-    fun searchSongs(
+    fun searchSongsAsync(
         @Query("term") query: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int

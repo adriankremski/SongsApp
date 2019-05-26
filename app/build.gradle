@@ -35,13 +35,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     def mobileDependencies = rootProject.ext.mobileDependencies
+    def mobileTestDependencies = rootProject.ext.mobileTestDependencies
 
     implementation project(':presentation')
     implementation project(':data')
@@ -49,6 +45,8 @@ dependencies {
     implementation project(':remote')
     implementation project(':cache')
 
+    implementation mobileDependencies.appCompat
+    implementation mobileDependencies.coreKtx
     implementation mobileDependencies.koinCore
     implementation mobileDependencies.timber
     implementation mobileDependencies.koinCoreExt
@@ -68,4 +66,8 @@ dependencies {
     implementation mobileDependencies.jodaTime
 
     kapt mobileDependencies.lifecycleCompiler
+
+    testImplementation mobileTestDependencies.junit
+    androidTestImplementation mobileTestDependencies.espresso
+
 }

@@ -8,7 +8,6 @@ import com.github.snuffix.songapp.domain.model.Song
 import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
 import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
-import com.github.snuffix.songapp.presentation.extensions.map
 import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
@@ -18,7 +17,7 @@ import timber.log.Timber
 import kotlin.properties.Delegates
 
 open class SongsViewModel constructor(
-    private val startSearchSource: SearchSource = SearchSource.ALL_SONGS,
+    startSearchSource: SearchSource = SearchSource.ALL_SONGS,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
@@ -142,7 +141,7 @@ open class SongsViewModel constructor(
         }
     }
 
-    fun List<Song>.mapToView() = map { mapper.mapToView(it) }
+    private fun List<Song>.mapToView() = map { mapper.mapToView(it) }
 }
 
 

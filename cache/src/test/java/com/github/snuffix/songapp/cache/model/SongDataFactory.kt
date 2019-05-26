@@ -23,11 +23,11 @@ object SongDataFactory {
         )
     }
 
-    fun makeRawSongsJson(songs: List<SongRawModel>) = gson.toJson(songs)
+    fun makeRawSongsJson(songs: List<SongRawModel>): String = gson.toJson(songs)
 
     fun makeRawSongsList(count: Int) = List(count) { makeSongRawModel() }
 
-    fun makeSongRawModel(): SongRawModel {
+    private fun makeSongRawModel(): SongRawModel {
         return SongRawModel(
             trackName = randomString(),
             artistName = randomString(),

@@ -26,10 +26,10 @@ class SongsViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    var searchLocalSongs = mock<SearchLocalSongs>()
-    var searchRemoteSongs = mock<SearchRemoteSongs>()
-    var searchAllSongs = mock<SearchAllSongs>()
-    var mapper = SongViewMapper()
+    private var searchLocalSongs = mock<SearchLocalSongs>()
+    private var searchRemoteSongs = mock<SearchRemoteSongs>()
+    private var searchAllSongs = mock<SearchAllSongs>()
+    private var mapper = SongViewMapper()
 
 
     @get:Rule
@@ -37,14 +37,14 @@ class SongsViewModelTest {
 
     private val testQuery = "Test"
 
-    inline fun <reified T : Any> argumentCaptor() = ArgumentCaptor.forClass(T::class.java)
+    private inline fun <reified T : Any> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
 
     @Test
     fun searchExecutesLocalSongsUseCaseWithCorrectParams() {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             stubSearchLocalSongs(SongDataFactory.makeSongsList(10, false))
 
-            var songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
             songViewModel.searchSongs(testQuery, false)
 
             val paramsCaptor = argumentCaptor<SearchLocalSongs.Params>()
@@ -69,7 +69,7 @@ class SongsViewModelTest {
             val songsList = SongDataFactory.makeSongsList(10, false)
             stubSearchLocalSongs(songsList)
 
-            var songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
             songViewModel.searchSongs(testQuery, false)
 
             assertTrue(songViewModel.songsData().value is Resource.Success)
@@ -87,7 +87,7 @@ class SongsViewModelTest {
 
             stubSearchAllSongs(localSongs + remoteSongs)
 
-            var songViewModel = SongsViewModel(SearchSource.ALL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = SongsViewModel(SearchSource.ALL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
             songViewModel.searchSongs(testQuery, false)
             songViewModel.searchSongsIncremental()
 

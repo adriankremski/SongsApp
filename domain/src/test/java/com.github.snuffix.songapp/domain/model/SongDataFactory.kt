@@ -15,7 +15,7 @@ object SongDataFactory {
         return Random().nextInt()
     }
 
-    fun makeSong(): Song {
+    private fun makeSong(): Song {
         return Song(
             id = randomString(),
             trackName = randomString(),

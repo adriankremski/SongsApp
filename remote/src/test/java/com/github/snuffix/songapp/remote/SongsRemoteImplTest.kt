@@ -1,6 +1,5 @@
 package com.github.snuffix.songapp.remote
 
-import com.github.snuffix.songapp.data.model.SongEntity
 import com.github.snuffix.songapp.data.repository.RemoteException
 import com.github.snuffix.songapp.remote.mapper.SongsMapper
 import com.github.snuffix.songapp.remote.model.SongDataFactory
@@ -27,13 +26,13 @@ class SongsRemoteImplTest : BaseRemoteTest() {
         runBlocking {
             stubSearchSongs(SongDataFactory.makeSongsResponse(listOf()))
             remote.getSongs(testQuery, 0, 100)
-            verify(service).searchSongs(testQuery, 0, 100)
+            verify(service).searchSongsAsync(testQuery, 0, 100)
         }
     }
 
     private fun stubSearchSongs(model: SongsResponse) {
         runBlocking {
-            whenever(service.searchSongs(any(), any(), any())).thenReturn(deferredSuccessResponseOf(model))
+            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(deferredSuccessResponseOf(model))
         }
     }
 
@@ -65,7 +64,7 @@ class SongsRemoteImplTest : BaseRemoteTest() {
 
     private fun stubSearchSongsError(errorCode: Int) {
         runBlocking {
-            whenever(service.searchSongs(any(), any(), any())).thenReturn(deferredApiError(403, responseBodyOf(SongDataFactory.makeSongsResponse(listOf()))))
+            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(deferredApiError(403, responseBodyOf(SongDataFactory.makeSongsResponse(listOf()))))
         }
     }
 }

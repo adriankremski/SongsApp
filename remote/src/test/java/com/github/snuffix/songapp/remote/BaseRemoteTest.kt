@@ -5,7 +5,6 @@ import kotlinx.coroutines.CompletableDeferred
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import retrofit2.Response
-import java.io.IOException
 
 abstract class BaseRemoteTest {
 
@@ -15,7 +14,7 @@ abstract class BaseRemoteTest {
         complete(Response.success(result))
     }
 
-    fun responseBodyOf(instance: Any) = ResponseBody.create(MediaType.parse("application/json"), gson.toJson(instance))
+    fun responseBodyOf(instance: Any): ResponseBody = ResponseBody.create(MediaType.parse("application/json"), gson.toJson(instance))
 
     fun <T> deferredApiError(errorCode: Int, body: ResponseBody) = CompletableDeferred<Response<T>>().apply {
         complete(Response.error(errorCode, body))
