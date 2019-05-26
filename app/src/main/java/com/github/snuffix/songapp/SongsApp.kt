@@ -8,7 +8,7 @@ import com.github.snuffix.songapp.cache.db.SongsDatabase
 import com.github.snuffix.songapp.cache.mapper.CachedSongsMapper
 import com.github.snuffix.songapp.cache.mapper.RawSongsMapper
 import com.github.snuffix.songapp.cache.parser.SongsParser
-import com.github.snuffix.songapp.data.SongRepositoryImpl
+import com.github.snuffix.songapp.data.SongsRepositoryImpl
 import com.github.snuffix.songapp.data.mapper.SongsEntityMapper
 import com.github.snuffix.songapp.data.repository.SongsLocalSource
 import com.github.snuffix.songapp.data.repository.SongsRemoteSource
@@ -81,7 +81,7 @@ val remoteModule = module {
 
 val dataModule = module {
     single { SongsEntityMapper() }
-    singleBy<SongsRepository, SongRepositoryImpl>()
+    singleBy<SongsRepository, SongsRepositoryImpl>()
 }
 
 val domainModule = module {

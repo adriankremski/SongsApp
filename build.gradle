@@ -43,6 +43,12 @@ ext {
     roomVersion = '2.1.0-alpha04'
     navVersion = "2.0.0"
     glideVersion = '4.0.0'
+    jUnitVersion = '4.12'
+    assertJVersion = '3.8.0'
+    mockitoKotlinVersion = '2.1.0'
+    espressoVersion = '3.1.0'
+    mockitoVersion = '2.18.3'
+    mockitoAndroidVersion = '2.18.3'
 
     coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -55,6 +61,9 @@ ext {
     lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     lifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
     timber = "com.jakewharton.timber:timber:4.7.1"
+    junit = "junit:junit:$jUnitVersion"
+    mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+    assertj = "org.assertj:assertj-core:$assertJVersion"
 
     mobileDependencies = [
             koinCore            : "org.koin:koin-core:$koinVersion",
@@ -94,10 +103,22 @@ ext {
             kotlin           : kotlin
     ]
 
+    domainTestDependencies = [
+            junit  : junit,
+            mockito: mockito,
+            assertj: assertj
+    ]
+
     dataDependencies = [
             kotlin           : kotlin,
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid
+    ]
+
+    dataTestDependencies = [
+            junit  : junit,
+            mockito: mockito,
+            assertj: assertj
     ]
 
     remoteDependencies = [

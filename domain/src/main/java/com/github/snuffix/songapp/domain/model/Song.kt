@@ -2,7 +2,7 @@ package com.github.snuffix.songapp.domain.model
 
 import java.util.*
 
-class Song(
+data class Song(
     val id: String,
     val trackName: String,
     val releaseDate: Date? = null,

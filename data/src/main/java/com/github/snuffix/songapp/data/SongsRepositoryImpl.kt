@@ -15,7 +15,7 @@ import java.net.UnknownHostException
 
 const val QUERY_LIMIT = 50
 
-open class SongRepositoryImpl constructor(
+open class SongsRepositoryImpl constructor(
     private val mapper: SongsEntityMapper,
     private val remoteSource: SongsRemoteSource,
     private val localSource: SongsLocalSource
