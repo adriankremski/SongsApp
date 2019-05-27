@@ -14,12 +14,16 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.github.snuffix.songapp.TestRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [usesCleartextTraffic:"false"]
+        }
+        debug {
+            manifestPlaceholders = [usesCleartextTraffic:"true"]
         }
     }
 
@@ -68,6 +72,12 @@ dependencies {
     kapt mobileDependencies.lifecycleCompiler
 
     testImplementation mobileTestDependencies.junit
-    androidTestImplementation mobileTestDependencies.espresso
 
+    androidTestImplementation mobileTestDependencies.espresso
+    androidTestImplementation mobileTestDependencies.mockWebServer
+    androidTestImplementation mobileTestDependencies.testExtJunit
+    androidTestImplementation mobileTestDependencies.androidRunner
+    androidTestImplementation mobileTestDependencies.androidRules
+    androidTestImplementation mobileTestDependencies.gson
+    androidTestImplementation mobileTestDependencies.retrofit
 }

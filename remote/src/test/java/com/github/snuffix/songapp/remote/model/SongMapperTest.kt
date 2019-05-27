@@ -1,14 +1,14 @@
 package com.github.snuffix.songapp.remote.model
 
 import com.github.snuffix.songapp.data.model.SongEntity
-import com.github.snuffix.songapp.remote.mapper.SongsMapper
+import com.github.snuffix.songapp.remote.mapper.RemoteSongsMapper
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SongMapperTest {
 
-    private val mapper = SongsMapper()
+    private val mapper = RemoteSongsMapper()
 
     @Test
     fun mapFromModelMapsData() {

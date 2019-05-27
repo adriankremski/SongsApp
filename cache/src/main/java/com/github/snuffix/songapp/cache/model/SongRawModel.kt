@@ -2,7 +2,7 @@ package com.github.snuffix.songapp.cache.model
 
 import com.google.gson.annotations.SerializedName
 
-@SuppressWarnings("unused")
+@Suppress("unused")
 class SongRawModel(
     @SerializedName("Song Clean") val trackName: String,
     @SerializedName("ARTIST CLEAN") val artistName: String,

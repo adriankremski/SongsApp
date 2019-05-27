@@ -13,19 +13,18 @@ import java.util.concurrent.TimeUnit
 
 
 object ITunesSongServiceFactory {
-    fun makeService(cacheDir: File, isDebug: Boolean, networkCheck: NetworkCheck): ITunesSongsService {
+    fun makeService(serverUrl: String, cacheDir: File, isDebug: Boolean, networkCheck: NetworkCheck): ITunesSongsService {
         val okHttpClient = makeOkHttpClient(cacheDir, networkCheck, makeLoggingInterceptor((isDebug)))
-        return makeService(okHttpClient)
+        return makeService(serverUrl, okHttpClient)
     }
 
-    private fun makeService(okHttpClient: OkHttpClient): ITunesSongsService {
+    private fun makeService(serverUrl: String, okHttpClient: OkHttpClient): ITunesSongsService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://itunes.apple.com/")
+            .baseUrl(serverUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-
 
         return retrofit.create(ITunesSongsService::class.java)
     }
@@ -46,7 +45,6 @@ object ITunesSongServiceFactory {
         val builder = chain.request().newBuilder()
 
         if (!networkCheck.isOnline()) {
-//            builder.cacheControl(CacheControl.FORCE_CACHE)
             throw NoConnectivityException()
         }
 

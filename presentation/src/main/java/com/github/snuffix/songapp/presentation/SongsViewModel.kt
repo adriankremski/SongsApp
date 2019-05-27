@@ -2,7 +2,6 @@ package com.github.snuffix.songapp.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.github.snuffix.songapp.domain.model.Result
 import com.github.snuffix.songapp.domain.model.Song
 import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
@@ -12,17 +11,17 @@ import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.properties.Delegates
 
 open class SongsViewModel constructor(
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
+    uiScopeLauncher: Launcher,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
     private val mapper: SongViewMapper
-) : BaseViewModel() {
+) : BaseViewModel(uiScopeLauncher) {
 
     private val songs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
@@ -54,7 +53,7 @@ open class SongsViewModel constructor(
         }
 
         currentJob?.cancel()
-        currentJob = viewModelScope.launch {
+        currentJob = launch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
@@ -109,7 +108,7 @@ open class SongsViewModel constructor(
 
         isIncrementalSearch = true
 
-        currentJob = viewModelScope.launch {
+        currentJob = launch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     val localSongsOffset = songs.count { !it.isFromRemote }
@@ -143,7 +142,6 @@ open class SongsViewModel constructor(
 
     private fun List<Song>.mapToView() = map { mapper.mapToView(it) }
 }
-
 
 enum class SearchSource {
     REMOTE_SONGS, LOCAL_SONGS, ALL_SONGS

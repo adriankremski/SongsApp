@@ -5,7 +5,7 @@ import com.github.snuffix.songapp.remote.model.SongModel
 import org.joda.time.DateTime
 
 
-open class SongsMapper : ModelMapper<SongModel, SongEntity> {
+open class RemoteSongsMapper : ModelMapper<SongModel, SongEntity> {
     override fun mapFromModel(model: SongModel): SongEntity {
         return SongEntity(
             id = model.trackId.toString(),

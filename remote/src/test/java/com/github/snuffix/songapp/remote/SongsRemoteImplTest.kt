@@ -1,7 +1,7 @@
 package com.github.snuffix.songapp.remote
 
 import com.github.snuffix.songapp.data.repository.RemoteException
-import com.github.snuffix.songapp.remote.mapper.SongsMapper
+import com.github.snuffix.songapp.remote.mapper.RemoteSongsMapper
 import com.github.snuffix.songapp.remote.model.SongDataFactory
 import com.github.snuffix.songapp.remote.model.SongsResponse
 import com.github.snuffix.songapp.remote.service.ITunesSongsService
@@ -15,7 +15,7 @@ import org.junit.Test
 
 class SongsRemoteImplTest : BaseRemoteTest() {
 
-    private val songsMapper = SongsMapper()
+    private val songsMapper = RemoteSongsMapper()
     private val service = mock<ITunesSongsService>()
     private val remote = SongsRemoteSourceImpl(service, songsMapper)
 

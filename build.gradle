@@ -69,6 +69,7 @@ ext {
     junit = "junit:junit:$jUnitVersion"
     mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     assertj = "org.assertj:assertj-core:$assertJVersion"
+    retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
     mobileDependencies = [
             koinCore            : "org.koin:koin-core:$koinVersion",
@@ -97,7 +98,11 @@ ext {
             androidRunner: "androidx.test:runner:$androidRunnerVersion",
             androidRules : "androidx.test:rules:$androidRulesVersion",
             espresso     : "com.android.support.test.espresso:espresso-core:3.1.0",
-            junit        : junit
+            mockWebServer: "com.squareup.okhttp3:mockwebserver:$okHttpVersion",
+            testExtJunit : "androidx.test.ext:junit:1.0.0",
+            junit        : junit,
+            retrofit     : retrofit,
+            gson         : gson,
 
     ]
 
@@ -151,8 +156,8 @@ ext {
             retrofitCoroutinesAdapter: "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2",
             okHttp                   : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okHttpLogger             : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
-            retrofit                 : "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitConverter        : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+            retrofit                 : retrofit,
             kotlin                   : kotlin,
             coroutinesCore           : coroutinesCore,
             coroutinesAndroid        : coroutinesAndroid,

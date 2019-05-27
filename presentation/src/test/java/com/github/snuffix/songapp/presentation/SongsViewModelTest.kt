@@ -44,7 +44,7 @@ class SongsViewModelTest {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             stubSearchLocalSongs(SongDataFactory.makeSongsList(10, false))
 
-            val songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = createViewModel(SearchSource.LOCAL_SONGS)
             songViewModel.searchSongs(testQuery, false)
 
             val paramsCaptor = argumentCaptor<SearchLocalSongs.Params>()
@@ -56,6 +56,13 @@ class SongsViewModelTest {
             verifyZeroInteractions(searchRemoteSongs)
         }
     }
+
+    fun createViewModel(startSource: SearchSource) = SongsViewModel(
+        uiScopeLauncher = Launcher.Default(),
+        startSearchSource = startSource,
+        searchAllSongs = searchAllSongs, searchRemoteSongs = searchRemoteSongs,
+        searchLocalSongs = searchLocalSongs, mapper = mapper
+    )
 
     private fun stubSearchLocalSongs(songs: List<Song>) {
         runBlocking {
@@ -69,7 +76,7 @@ class SongsViewModelTest {
             val songsList = SongDataFactory.makeSongsList(10, false)
             stubSearchLocalSongs(songsList)
 
-            val songViewModel = SongsViewModel(SearchSource.LOCAL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = createViewModel(SearchSource.LOCAL_SONGS)
             songViewModel.searchSongs(testQuery, false)
 
             assertTrue(songViewModel.songsData().value is Resource.Success)
@@ -87,7 +94,7 @@ class SongsViewModelTest {
 
             stubSearchAllSongs(localSongs + remoteSongs)
 
-            val songViewModel = SongsViewModel(SearchSource.ALL_SONGS, searchLocalSongs, searchRemoteSongs, searchAllSongs, mapper)
+            val songViewModel = createViewModel(SearchSource.ALL_SONGS)
             songViewModel.searchSongs(testQuery, false)
             songViewModel.searchSongsIncremental()
 
