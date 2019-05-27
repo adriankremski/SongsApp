@@ -8,7 +8,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 
-open class SongsParser : JsonParser<SongRawModel> {
+class SongsParser : JsonParser<SongRawModel> {
     override suspend fun readData(source: InputStream, bufferSize: Int, onFlush: suspend (List<SongRawModel>) -> Unit) {
         ParserUtil.readData(source, bufferSize, onFlush)
     }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
-import com.github.snuffix.songapp.fragment.songs.adapter.ViewItem
+import com.github.snuffix.songapp.songs.adapter.ViewItem
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 
 class SearchProgressAdapterDelegate : AdapterDelegate<List<ViewItem>>() {

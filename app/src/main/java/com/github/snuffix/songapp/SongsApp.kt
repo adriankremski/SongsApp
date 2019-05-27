@@ -34,7 +34,6 @@ import org.koin.experimental.builder.singleBy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-
 @Suppress("unused")
 open class SongsApp : Application() {
 

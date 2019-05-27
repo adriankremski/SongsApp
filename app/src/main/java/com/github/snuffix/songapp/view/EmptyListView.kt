@@ -9,7 +9,7 @@ import com.github.snuffix.songapp.R
 class EmptyListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.item_empty_list, this, true)
+        LayoutInflater.from(context).inflate(R.layout.view_empty, this, true)
         orientation = VERTICAL
     }
 }

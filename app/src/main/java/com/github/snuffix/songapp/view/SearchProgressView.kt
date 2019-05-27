@@ -10,7 +10,7 @@ import com.github.snuffix.songapp.R
 class SearchProgressView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.item_search_progress, this, true)
+        LayoutInflater.from(context).inflate(R.layout.view_search_progress, this, true)
     }
 
     fun show() {

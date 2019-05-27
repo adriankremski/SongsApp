@@ -57,7 +57,7 @@ class SongsViewModelTest {
         }
     }
 
-    fun createViewModel(startSource: SearchSource) = SongsViewModel(
+    private fun createViewModel(startSource: SearchSource) = SongsViewModel(
         uiScopeLauncher = Launcher.Default(),
         startSearchSource = startSource,
         searchAllSongs = searchAllSongs, searchRemoteSongs = searchRemoteSongs,

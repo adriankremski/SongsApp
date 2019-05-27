@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.io.IOException
 
-open class SongsRemoteSourceImpl constructor(
+class SongsRemoteSourceImpl constructor(
     private val service: ITunesSongsService,
     private val mapper: RemoteSongsMapper
 ) : SongsRemoteSource {

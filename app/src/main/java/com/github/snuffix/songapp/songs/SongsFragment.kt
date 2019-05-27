@@ -1,20 +1,18 @@
-package com.github.snuffix.songapp.fragment
+package com.github.snuffix.songapp.songs
 
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import com.github.snuffix.songapp.BR
 import com.github.snuffix.songapp.BaseFragment
 import com.github.snuffix.songapp.MainActivity
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.databinding.FragmentSongsBinding
 import com.github.snuffix.songapp.extensions.setVisible
-import com.github.snuffix.songapp.fragment.songs.adapter.SongsAdapter
 import com.github.snuffix.songapp.mapper.SongsMapper
 import com.github.snuffix.songapp.presentation.SearchSource
 import com.github.snuffix.songapp.presentation.SongsViewModel
 import com.github.snuffix.songapp.presentation.model.ErrorType
+import com.github.snuffix.songapp.songs.adapter.SongsAdapter
 import com.github.snuffix.songapp.utils.DebouncingQueryTextListener
 import kotlinx.android.synthetic.main.fragment_songs.*
 import org.koin.android.ext.android.inject
@@ -35,10 +33,9 @@ class SongsFragment : BaseFragment() {
         get() = songsRecycler.adapter as SongsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewDataBinding: FragmentSongsBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_songs, container, false)
-
-        viewDataBinding.setVariable(BR.viewmodel, songsViewModel)
+        val viewDataBinding = performDataBinding<FragmentSongsBinding>(
+            inflater = inflater, layoutResID = R.layout.fragment_songs, container = container, viewModel = songsViewModel
+        )
 
         setHasOptionsMenu(true)
 

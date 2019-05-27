@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.drawableCompat
-import kotlinx.android.synthetic.main.item_error_view.view.*
+import kotlinx.android.synthetic.main.view_error.view.*
 
 
 class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.item_error_view, this, true)
+        LayoutInflater.from(context).inflate(R.layout.view_error, this, true)
     }
 
     fun networkError() {

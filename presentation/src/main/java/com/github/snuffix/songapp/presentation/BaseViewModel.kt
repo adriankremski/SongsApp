@@ -7,7 +7,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel(private val uiScopeLauncher: Launcher) : ViewModel() {
-    fun launch(block: suspend CoroutineScope.() -> Unit): Job? = uiScopeLauncher.launch(viewModelScope, block)
+    fun viewModelScopeLaunch(block: suspend CoroutineScope.() -> Unit): Job? = uiScopeLauncher.launch(viewModelScope, block)
 }
 
 /*

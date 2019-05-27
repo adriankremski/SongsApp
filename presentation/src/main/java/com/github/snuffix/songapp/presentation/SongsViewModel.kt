@@ -14,7 +14,7 @@ import kotlinx.coroutines.Job
 import timber.log.Timber
 import kotlin.properties.Delegates
 
-open class SongsViewModel constructor(
+class SongsViewModel constructor(
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
     uiScopeLauncher: Launcher,
     private val searchLocalSongs: SearchLocalSongs,
@@ -53,7 +53,7 @@ open class SongsViewModel constructor(
         }
 
         currentJob?.cancel()
-        currentJob = launch {
+        currentJob = viewModelScopeLaunch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
@@ -92,7 +92,7 @@ open class SongsViewModel constructor(
                 songsResource.postValue(Resource.networkError())
             }
             else -> {
-                songsResource.postValue(Resource.error(message = "Oops, something went wrong"))
+                songsResource.postValue(Resource.error())
             }
         }
     }
@@ -108,7 +108,7 @@ open class SongsViewModel constructor(
 
         isIncrementalSearch = true
 
-        currentJob = launch {
+        currentJob = viewModelScopeLaunch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     val localSongsOffset = songs.count { !it.isFromRemote }

@@ -5,7 +5,7 @@ import com.github.snuffix.songapp.presentation.model.SongView
 import org.joda.time.DateTime
 
 
-open class SongsMapper : ViewMapper<SongView, Song> {
+class SongsMapper : ViewMapper<SongView, Song> {
     override fun mapToUIModel(song: SongView) = Song(
         id = song.id,
         trackName = song.trackName,

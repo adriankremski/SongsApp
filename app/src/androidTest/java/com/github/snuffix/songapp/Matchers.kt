@@ -32,7 +32,7 @@ fun hasItemCount(matcher: Matcher<Int>): Matcher<View> {
 fun waitUntil(matcher: Matcher<View>): ViewAction {
     return actionWithAssertions(object : ViewAction {
         override fun getConstraints(): Matcher<View> {
-            return ViewMatchers.isAssignableFrom(View::class.java!!)
+            return ViewMatchers.isAssignableFrom(View::class.java)
         }
 
         override fun getDescription(): String {

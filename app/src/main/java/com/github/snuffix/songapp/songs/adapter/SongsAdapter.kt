@@ -1,4 +1,4 @@
-package com.github.snuffix.songapp.fragment.songs.adapter
+package com.github.snuffix.songapp.songs.adapter
 
 import com.github.snuffix.songapp.recycler.SearchProgress
 import com.github.snuffix.songapp.recycler.SearchProgressAdapterDelegate

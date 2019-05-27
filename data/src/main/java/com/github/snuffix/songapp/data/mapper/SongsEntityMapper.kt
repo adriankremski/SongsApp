@@ -3,7 +3,7 @@ package com.github.snuffix.songapp.data.mapper
 import com.github.snuffix.songapp.data.model.SongEntity
 import com.github.snuffix.songapp.domain.model.Song
 
-open class SongsEntityMapper : EntityMapper<SongEntity, Song> {
+class SongsEntityMapper : EntityMapper<SongEntity, Song> {
     override fun mapFromEntity(song: SongEntity, isFromRemote: Boolean): Song {
         return Song(
             id = song.id,

@@ -29,8 +29,9 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class RemoteSongsScreenTest {
+
     @get:Rule
-    private val activityRule = ActivityTestRule(MainActivity::class.java, false, false)
+    private val activityRule = ActivityTestRule(MainActivity::class.java)
 
     private lateinit var server: MockWebServer
 

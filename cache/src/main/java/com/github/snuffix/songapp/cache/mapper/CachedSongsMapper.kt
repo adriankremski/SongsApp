@@ -4,7 +4,7 @@ import com.github.snuffix.songapp.cache.model.SongCachedModel
 import com.github.snuffix.songapp.data.model.SongEntity
 
 
-open class CachedSongsMapper : ModelMapper<SongCachedModel, SongEntity> {
+class CachedSongsMapper : ModelMapper<SongCachedModel, SongEntity> {
     override fun mapFromModel(model: SongCachedModel): SongEntity {
         return SongEntity(
             id = model.id,

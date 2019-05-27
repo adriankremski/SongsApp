@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 const val BUFFER_SIZE = 200
 
-open class SongsLocalSourceImpl constructor(
+class SongsLocalSourceImpl constructor(
     private val context: Context,
     private val cachedSongsMapper: CachedSongsMapper,
     private val rawSongsMapper: RawSongsMapper,

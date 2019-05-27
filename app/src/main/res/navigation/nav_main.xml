@@ -4,6 +4,6 @@
             android:id="@+id/nav_main" app:startDestination="@id/songsFragment">
 
     <fragment android:id="@+id/songsFragment"
-              android:name="com.github.snuffix.songapp.fragment.SongsFragment"
+              android:name="com.github.snuffix.songapp.songs.SongsFragment"
               android:label="SongsFragment"/>
 </navigation>
