@@ -30,6 +30,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -65,7 +66,7 @@ open class SongsApp : Application() {
         single { CachedSongsMapper() }
         single { RawSongsMapper() }
         single { SongsParser() }
-        singleBy<SongsLocalSource, SongsLocalSourceImpl>()
+        factoryBy<SongsLocalSource, SongsLocalSourceImpl>()
     }
 
     private val remoteModule = module {
@@ -82,7 +83,7 @@ open class SongsApp : Application() {
 
         single { RemoteSongsMapper() }
         single { ITunesSongServiceFactory.makeService(serverUrl, androidApplication().cacheDir, BuildConfig.DEBUG, get()) }
-        singleBy<SongsRemoteSource, SongsRemoteSourceImpl>()
+        factoryBy<SongsRemoteSource, SongsRemoteSourceImpl>()
     }
 
     private val dataModule = module {
@@ -91,14 +92,14 @@ open class SongsApp : Application() {
     }
 
     private val domainModule = module {
-        single { SearchAllSongs(get()) }
-        single { SearchLocalSongs(get()) }
-        single { SearchRemoteSongs(get()) }
+        factory { SearchAllSongs(get()) }
+        factory { SearchLocalSongs(get()) }
+        factory { SearchRemoteSongs(get()) }
     }
 
     private val presentationModule = module {
         single { SongViewMapper() }
-        singleBy<Launcher, Launcher.Default>()
+        factoryBy<Launcher, Launcher.Default>()
         viewModel { SongsViewModel(uiScopeLauncher = get(), searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
     }
 
