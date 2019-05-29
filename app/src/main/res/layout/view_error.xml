@@ -24,6 +24,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+    <TextView
+            android:id="@+id/retryButton"
+            style="@style/ListSubtitle1"
+            android:layout_gravity="start|center_vertical"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:textColor="@color/colorPrimary"
+            android:paddingStart="@dimen/spacing_medium"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/errorImage"
+            app:layout_constraintBottom_toBottomOf="@id/errorImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAllCaps="true"
+            android:text="@string/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"/>
+
     <View
             android:background="@color/delimiterColor"
             android:layout_marginTop="@dimen/spacing_normal"

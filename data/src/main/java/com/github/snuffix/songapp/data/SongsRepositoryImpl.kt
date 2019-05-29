@@ -31,6 +31,7 @@ class SongsRepositoryImpl constructor(
 
     override suspend fun getLocalSongs(query: String, offset: Int): Result<List<Song>> {
         val result = getResult { localSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
+        Result
 
         return result.whenOkReturn { songs ->
             songs.map { mapper.mapFromEntity(it, isFromRemote = false) }

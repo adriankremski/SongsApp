@@ -9,4 +9,5 @@
     <string name="no_results_found">No results found</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="something_went_wrong">Oops, something went wrong</string>
+    <string name="retry">Retry</string>
 </resources>

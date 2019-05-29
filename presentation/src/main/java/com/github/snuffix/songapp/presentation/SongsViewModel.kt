@@ -11,6 +11,7 @@ import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import org.koin.core.KoinComponent
 import timber.log.Timber
 import kotlin.properties.Delegates
@@ -34,13 +35,15 @@ class SongsViewModel constructor(
 
     fun songsData(): LiveData<Resource<List<SongView>>> = songsResource
 
+    val isTooManyRequestsError: (Result<List<Song>>) -> Boolean = { it is Result.ApiError && it.code == 403 }
+
     var searchSource: SearchSource by Delegates.observable(startSearchSource) { _, oldMode, newMode ->
         if (oldMode != newMode) {
             searchSongs(lastQuery, true)
         }
     }
 
-    fun searchSongs(query: String, forceFetch: Boolean = false) {
+    fun searchSongs(query: String = lastQuery, forceFetch: Boolean = false) {
         if (query == lastQuery && !forceFetch) return
 
         lastQuery = query
@@ -55,26 +58,38 @@ class SongsViewModel constructor(
 
         currentJob?.cancel()
         currentJob = uiScope.launch {
-            val searchResult = when (searchSource) {
+
+            val searchResultFlow = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
-                    searchAllSongs.execute(SearchAllSongs.Params.create(lastQuery, 0, 0))
+                    searchAllSongs.executeWithRetry(SearchAllSongs.Params.create(lastQuery, 0, 0)) {
+                        isTooManyRequestsError(this)
+                    }
                 }
                 SearchSource.REMOTE_SONGS -> {
                     Timber.d("Fetching remote songs with offset 0")
-                    searchRemoteSongs.execute(SearchRemoteSongs.Params.create(lastQuery, 0))
+                    searchRemoteSongs.executeWithRetry(SearchRemoteSongs.Params.create(lastQuery, 0)) {
+                        isTooManyRequestsError(this)
+                    }
                 }
                 SearchSource.LOCAL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0")
-                    searchLocalSongs.execute(SearchLocalSongs.Params.create(lastQuery, 0))
+                    searchLocalSongs.executeWithRetry(SearchLocalSongs.Params.create(lastQuery, 0)) {
+                        isTooManyRequestsError(this)
+                    }
                 }
             }
 
-            searchResult.whenOk {
-                handleSearchSuccess(this)
-            }.whenError {
-                handleSearchError(this)
+            searchResultFlow.collect {
+                val searchResult = it.result
+
+                searchResult.whenOk {
+                    handleSearchSuccess(this)
+                }.whenError {
+                    handleSearchError(this)
+                }
             }
+
         }
     }
 
@@ -86,7 +101,7 @@ class SongsViewModel constructor(
 
     private fun handleSearchError(errorResult: Result.Error) {
         when {
-            errorResult is Result.ApiError && errorResult.code == 403 -> {
+            isTooManyRequestsError(errorResult) -> {
                 songsResource.postValue(Resource.apiError("Too many requests. Please wait"))
             }
             errorResult is Result.NetworkError -> {

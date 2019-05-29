@@ -12,9 +12,13 @@ import kotlinx.android.synthetic.main.view_error.view.*
 
 class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    var onRetry: () -> Unit = {}
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_error, this, true)
+        retryButton.setOnClickListener { onRetry() }
     }
+
 
     fun networkError() {
         errorImage.setBackgroundResource(R.drawable.network_error_animation)

@@ -53,6 +53,10 @@ class SongsFragment : BaseFragment() {
         songsRecycler.adapter = SongsAdapter()
 
         subscribeToSongs()
+
+        errorView.onRetry = {
+            songsViewModel.searchSongs(forceFetch = true)
+        }
     }
 
     private fun initSearchView() {
