@@ -65,6 +65,10 @@ dependencies {
     implementation presentationDependencies.kotlin
     implementation presentationDependencies.coroutinesCore
     implementation presentationDependencies.coroutinesAndroid
+    implementation presentationDependencies.koinCore
+    implementation presentationDependencies.koinCoreExt
+    implementation presentationDependencies.koinAndroid
+    implementation presentationDependencies.koinAndroidViewModel
 
     implementation presentationDependencies.lifecycleRuntime
     implementation presentationDependencies.lifecycleExtensions
@@ -74,6 +78,7 @@ dependencies {
     testImplementation presentationTestDependencies.junit
     testImplementation presentationTestDependencies.mockito
     testImplementation presentationTestDependencies.assertj
+    testImplementation presentationTestDependencies.koinTest
     testImplementation presentationTestDependencies.robolectric
     testImplementation presentationTestDependencies.archTesting
 

@@ -18,17 +18,20 @@ import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
 import com.github.snuffix.songapp.mapper.SongsMapper
 import com.github.snuffix.songapp.presentation.Launcher
+import com.github.snuffix.songapp.presentation.LauncherFactory
 import com.github.snuffix.songapp.presentation.SongsViewModel
 import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.remote.SongsRemoteSourceImpl
 import com.github.snuffix.songapp.remote.mapper.RemoteSongsMapper
 import com.github.snuffix.songapp.remote.service.ITunesSongServiceFactory
 import com.github.snuffix.songapp.remote.service.NetworkCheck
+import kotlinx.coroutines.CoroutineScope
 import net.danlew.android.joda.JodaTimeAndroid
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.experimental.builder.factoryBy
 import org.koin.experimental.builder.singleBy
@@ -38,8 +41,8 @@ import timber.log.Timber.DebugTree
 @Suppress("unused")
 open class SongsApp : Application() {
 
-    protected open val coroutineLauncher: Launcher = Launcher.Default()
     protected open val serverUrl: String = "https://itunes.apple.com/"
+    protected open val testModules : List<Module> = listOf()
 
     override fun onCreate() {
         super.onCreate()
@@ -55,9 +58,12 @@ open class SongsApp : Application() {
             androidContext(this@SongsApp)
             // modules
 
-            val productionModules = listOf(cacheModule, remoteModule, dataModule, domainModule, presentationModule, uiModule)
+            val productionModules = listOf(
+                cacheModule, remoteModule,
+                dataModule, domainModule, presentationModule, uiModule
+            )
 
-            modules(productionModules)
+            modules(productionModules + testModules)
         }
     }
 
@@ -96,11 +102,14 @@ open class SongsApp : Application() {
         factory { SearchLocalSongs(get()) }
         factory { SearchRemoteSongs(get()) }
     }
-
     private val presentationModule = module {
         single { SongViewMapper() }
-        factoryBy<Launcher, Launcher.Default>()
-        viewModel { SongsViewModel(uiScopeLauncher = get(), searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
+        factory<LauncherFactory> {
+            object : LauncherFactory {
+                override fun createLauncher(scope: CoroutineScope) = Launcher.Default(scope)
+            }
+        }
+        viewModel { SongsViewModel(get(), searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
     }
 
     private val uiModule = module {

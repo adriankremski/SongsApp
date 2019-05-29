@@ -11,17 +11,18 @@ import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
 import kotlinx.coroutines.Job
+import org.koin.core.KoinComponent
 import timber.log.Timber
 import kotlin.properties.Delegates
 
 class SongsViewModel constructor(
+    launcherFactory: LauncherFactory = DefaultLauncherFactory(),
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
-    uiScopeLauncher: Launcher,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
     private val mapper: SongViewMapper
-) : BaseViewModel(uiScopeLauncher) {
+) : BaseViewModel(launcherFactory), KoinComponent {
 
     private val songs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
@@ -53,7 +54,7 @@ class SongsViewModel constructor(
         }
 
         currentJob?.cancel()
-        currentJob = viewModelScopeLaunch {
+        currentJob = uiScope.launch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
@@ -108,7 +109,7 @@ class SongsViewModel constructor(
 
         isIncrementalSearch = true
 
-        currentJob = viewModelScopeLaunch {
+        currentJob = uiScope.launch {
             val searchResult = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     val localSongsOffset = songs.count { !it.isFromRemote }

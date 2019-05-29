@@ -56,8 +56,8 @@ dependencies {
 
     implementation mobileDependencies.appCompat
     implementation mobileDependencies.coreKtx
-    implementation mobileDependencies.koinCore
     implementation mobileDependencies.timber
+    implementation mobileDependencies.koinCore
     implementation mobileDependencies.koinCoreExt
     implementation mobileDependencies.koinAndroid
     implementation mobileDependencies.koinAndroidScope

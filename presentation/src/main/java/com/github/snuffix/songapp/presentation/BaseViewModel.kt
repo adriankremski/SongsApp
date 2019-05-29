@@ -5,9 +5,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
 
-abstract class BaseViewModel(private val uiScopeLauncher: Launcher) : ViewModel() {
-    fun viewModelScopeLaunch(block: suspend CoroutineScope.() -> Unit): Job? = uiScopeLauncher.launch(viewModelScope, block)
+abstract class BaseViewModel(launcherFactory: LauncherFactory) : ViewModel(), KoinComponent {
+    val uiScope = launcherFactory.createLauncher(viewModelScope)
+}
+
+interface LauncherFactory {
+    fun createLauncher(scope: CoroutineScope): Launcher
+}
+
+class DefaultLauncherFactory : LauncherFactory {
+    override fun createLauncher(scope: CoroutineScope) = Launcher.Default(scope)
 }
 
 /*
@@ -15,9 +24,11 @@ abstract class BaseViewModel(private val uiScopeLauncher: Launcher) : ViewModel(
  */
 interface Launcher {
 
-    fun launch(scope: CoroutineScope, block: suspend CoroutineScope.() -> Unit): Job
+    fun launch(block: suspend CoroutineScope.() -> Unit): Job
 
-    class Default : Launcher {
-        override fun launch(scope: CoroutineScope, block: suspend CoroutineScope.() -> Unit) = scope.launch { block() }
+    class Default(private val scope: CoroutineScope) : Launcher {
+
+        override fun launch(block: suspend CoroutineScope.() -> Unit) = scope.launch { block() }
     }
 }
+

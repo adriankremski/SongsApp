@@ -10,6 +10,7 @@ import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongDataFactory
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -18,10 +19,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.koin.test.AutoCloseKoinTest
 import org.mockito.ArgumentCaptor
 
 @RunWith(JUnit4::class)
-class SongsViewModelTest {
+class SongsViewModelTest : AutoCloseKoinTest() {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -38,6 +40,7 @@ class SongsViewModelTest {
     private val testQuery = "Test"
 
     private inline fun <reified T : Any> argumentCaptor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
+
 
     @Test
     fun searchExecutesLocalSongsUseCaseWithCorrectParams() {
@@ -58,7 +61,9 @@ class SongsViewModelTest {
     }
 
     private fun createViewModel(startSource: SearchSource) = SongsViewModel(
-        uiScopeLauncher = Launcher.Default(),
+        launcherFactory = object : LauncherFactory {
+            override fun createLauncher(scope: CoroutineScope) = Launcher.Default(scope)
+        },
         startSearchSource = startSource,
         searchAllSongs = searchAllSongs, searchRemoteSongs = searchRemoteSongs,
         searchLocalSongs = searchLocalSongs, mapper = mapper

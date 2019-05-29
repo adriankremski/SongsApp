@@ -107,14 +107,18 @@ ext {
     ]
 
     presentationDependencies = [
-            lifecycleViewModel : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
-            timber             : timber,
-            kotlin             : kotlin,
-            lifecycleExtensions: lifecycleExtensions,
-            coroutinesCore     : coroutinesCore,
-            coroutinesAndroid  : coroutinesAndroid,
-            lifecycleRuntime   : lifecycleRuntime,
-            lifecycleCompiler  : lifecycleCompiler
+            lifecycleViewModel  : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            timber              : timber,
+            kotlin              : kotlin,
+            koinCore            : "org.koin:koin-core:$koinVersion",
+            koinCoreExt         : "org.koin:koin-core-ext:$koinVersion",
+            koinAndroid         : "org.koin:koin-android:$koinVersion",
+            koinAndroidViewModel: "org.koin:koin-android-viewmodel:$koinVersion",
+            lifecycleExtensions : lifecycleExtensions,
+            coroutinesCore      : coroutinesCore,
+            coroutinesAndroid   : coroutinesAndroid,
+            lifecycleRuntime    : lifecycleRuntime,
+            lifecycleCompiler   : lifecycleCompiler
     ]
 
     presentationTestDependencies = [
@@ -123,6 +127,7 @@ ext {
             assertj          : assertj,
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid,
+            koinTest         : "org.koin:koin-test:$koinVersion",
             coroutinesTest   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion",
             robolectric      : "org.robolectric:robolectric:$robolectricVersion",
             archTesting      : "androidx.arch.core:core-testing:$archCompVersion"
