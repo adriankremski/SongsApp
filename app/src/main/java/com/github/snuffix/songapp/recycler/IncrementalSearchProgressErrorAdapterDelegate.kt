@@ -7,30 +7,34 @@ import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
 import com.github.snuffix.songapp.songs.adapter.ViewItem
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
+import kotlinx.android.synthetic.main.fragment_songs.view.*
 
-class IncrementalSearchProgressAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
+class IncrementalSearchProgressErrorAdapterDelegate(private val onRetry: () -> Unit) : AdapterDelegate<List<ViewItem>>() {
 
     override fun onBindViewHolder(
         items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>
     ) {
-        val progress = items[position] as SearchProgress
+        val error = items[position] as ProgressError
 
-        if (progress.show) {
+
+        if (error.show) {
             holder.itemView.visibility = View.VISIBLE
             holder.itemView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
+            holder.itemView.errorView.error(error.message)
         } else {
             holder.itemView.visibility = View.GONE
             holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
         }
     }
 
-    override fun isForViewType(items: List<ViewItem>, position: Int) = items[position] is SearchProgress
+    override fun isForViewType(items: List<ViewItem>, position: Int) = items[position] is ProgressError
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val itemView = parent.context.inflateView(R.layout.item_progress_row, parent)
+        val itemView = parent.context.inflateView(R.layout.item_error_row, parent)
+        itemView.errorView.onRetry = onRetry
         return object : RecyclerView.ViewHolder(itemView) {}
     }
 }
 
-class SearchProgress(var show: Boolean = false) : ViewItem
+class ProgressError(var show: Boolean = false, var message: String = "") : ViewItem
 

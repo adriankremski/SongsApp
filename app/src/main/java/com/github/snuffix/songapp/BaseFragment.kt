@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.github.snuffix.songapp.presentation.model.Event
 import com.github.snuffix.songapp.presentation.model.Resource
 
 abstract class BaseFragment : Fragment() {
@@ -21,6 +22,14 @@ abstract class BaseFragment : Fragment() {
         viewDataBinding.lifecycleOwner = this
         viewDataBinding.setVariable(layoutResID, viewModel)
         return viewDataBinding
+    }
+
+    fun <T : Any> LiveData<Event<T>>.observe(
+        onChanged: (T) -> Unit = {}
+    ) {
+        observe(viewLifecycleOwner, Observer<Event<T>> { event ->
+            event.getContentIfNotHandled()?.let(onChanged)
+        })
     }
 
     fun <T : Any> LiveData<Resource<T>>.observe(

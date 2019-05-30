@@ -50,9 +50,16 @@ class SongsFragment : BaseFragment() {
         initSearchView()
 
         songsRecycler.onBottomReached = { songsViewModel.searchSongsIncremental() }
-        songsRecycler.adapter = SongsAdapter()
+
+        songsRecycler.adapter = SongsAdapter() {
+            songsViewModel.searchSongsIncremental()
+        }
 
         subscribeToSongs()
+
+        songsViewModel.tooManyRequestsToast().observe {
+            Toast.makeText(requireContext(), "Too many requests. Please wait", Toast.LENGTH_LONG).show()
+        }
 
         errorView.onRetry = {
             songsViewModel.searchSongs(forceFetch = true)
@@ -76,6 +83,7 @@ class SongsFragment : BaseFragment() {
 
                 if (songsViewModel.isIncrementalSearch) {
                     songsAdapter.showIncrementalProgress(true)
+                    songsAdapter.showIncrementalError(false)
                     songsAdapter.notifyDataSetChanged()
                 } else {
                     searchProgress.show()
@@ -96,6 +104,7 @@ class SongsFragment : BaseFragment() {
                 searchProgress.hide(animate = songs.isNotEmpty())
                 songsAdapter.items = songs
                 songsAdapter.showIncrementalProgress(false)
+                songsAdapter.showIncrementalError(false)
                 songsAdapter.notifyDataSetChanged()
             }
         )
@@ -103,13 +112,14 @@ class SongsFragment : BaseFragment() {
 
     private fun onIncrementalSearchError(message: String? = null, errorType: ErrorType) {
         songsAdapter.showIncrementalProgress(false)
-        songsAdapter.notifyDataSetChanged()
 
         if (errorType == ErrorType.NETWORK) {
-            Toast.makeText(context, R.string.no_internet_connection, Toast.LENGTH_SHORT).show()
+            songsAdapter.showIncrementalError(true, getString(R.string.no_internet_connection))
         } else {
-            Toast.makeText(context, message ?: getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+            songsAdapter.showIncrementalError(true, "Too many requests")
         }
+
+        songsAdapter.notifyDataSetChanged()
     }
 
     private fun onSearchError(message: String? = null, errorType: ErrorType) {

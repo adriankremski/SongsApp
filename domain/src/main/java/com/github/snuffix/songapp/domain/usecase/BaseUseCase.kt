@@ -14,7 +14,7 @@ abstract class BaseUseCase<DATA : Any, in Params> {
     open suspend fun executeWithRetry(
         params: Params? = null,
         emitFailedResult: Boolean = false,
-        retryCount: Int = 5,
+        maxRetries: Int = 5,
         retryDelay: Long = TimeUnit.SECONDS.toMillis(1),
         shouldRetry: Result<DATA>.() -> Boolean
     ): Flow<RetryResult<DATA>> = flow {
@@ -24,7 +24,7 @@ abstract class BaseUseCase<DATA : Any, in Params> {
         while (true) {
             val result = execute(params)
 
-            if (result.shouldRetry() && retryNumber != retryCount) {
+            if (result.shouldRetry() && retryNumber != maxRetries) {
                 if (emitFailedResult) {
                     emit(RetryResult(retryNumber, result))
                 }
