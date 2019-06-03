@@ -4,8 +4,8 @@ import com.github.snuffix.songapp.domain.model.Result
 import com.github.snuffix.songapp.domain.model.Song
 import com.github.snuffix.songapp.domain.repository.SongsRepository
 
-open class SearchRemoteSongs constructor(private val songsRepository: SongsRepository) :
-    BaseUseCase<List<Song>, SearchRemoteSongs.Params>() {
+open class SearchRemoteSongs constructor(retryLogic: BaseRetryLogic, private val songsRepository: SongsRepository) :
+    BaseUseCase<List<Song>, SearchRemoteSongs.Params>(retryLogic) {
 
     override suspend fun buildUseCase(params: Params?): Result<List<Song>> {
         if (params == null) throw IllegalArgumentException("Params can't be null!")

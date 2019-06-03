@@ -14,9 +14,7 @@ import com.github.snuffix.songapp.model.SongDataFactory
 import com.github.snuffix.songapp.remote.model.SongsResponse
 import com.github.snuffix.songapp.server.EndpointResponse
 import com.github.snuffix.songapp.server.ErrorResponse
-import com.github.snuffix.songapp.server.MOCK_SERVER_PORT
 import com.github.snuffix.songapp.server.setResponses
-import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers.greaterThan
 import org.junit.After
