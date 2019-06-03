@@ -3,7 +3,6 @@ package com.github.snuffix.songapp
 import android.widget.AutoCompleteTextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -42,7 +41,6 @@ class RemoteSongsScreenTest {
 
     @Before
     fun setup() {
-        IdlingRegistry.getInstance().register(coroutinesIdlingResource)
         activityRule.launchActivity(null)
 
         setupMockServer(
@@ -62,7 +60,7 @@ class RemoteSongsScreenTest {
         onView(withId(R.id.songsRecycler))
             .perform(waitUntil(hasItemCount(greaterThan(0))))
             .check(matches(atPosition(0, hasDescendant(withText(searchResponse.results[0].trackName)))))
-        onView(withId(R.id.errorView)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.searchErrorView)).check(matches(not(isDisplayed())))
         onView(withId(R.id.emptyView)).check(matches(not(isDisplayed())))
     }
 
@@ -71,8 +69,8 @@ class RemoteSongsScreenTest {
         openActionBarOverflowOrOptionsMenu(context)
         onView(withText(R.string.itunes_songs)).perform(click())
         onView(isAssignableFrom(AutoCompleteTextView::class.java)).perform(typeText("Eminem"))
-        onView(withId(R.id.errorView)).perform(waitUntil(isDisplayed()))
-        onView(withId(R.id.errorView)).check(matches(hasDescendant(withText("Too many requests. Please wait"))))
+        onView(withId(R.id.searchErrorView)).perform(waitUntil(isDisplayed()))
+        onView(withId(R.id.searchErrorView)).check(matches(hasDescendant(withText("Too many requests. Please wait"))))
     }
 
     private fun setupMockServer(vararg responses: EndpointResponse) = MockWebServer().apply {

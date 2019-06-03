@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.snuffix.songapp.domain.model.Result
 import com.github.snuffix.songapp.domain.model.Song
-import com.github.snuffix.songapp.domain.usecase.BaseUseCase
 import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
 import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
@@ -19,13 +18,12 @@ import timber.log.Timber
 import kotlin.properties.Delegates
 
 class SongsViewModel constructor(
-    launcherFactory: LauncherFactory = DefaultLauncherFactory(),
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
     private val mapper: SongViewMapper
-) : BaseViewModel(launcherFactory), KoinComponent {
+) : BaseViewModel(), KoinComponent {
 
     private val songs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
@@ -61,7 +59,7 @@ class SongsViewModel constructor(
         }
 
         currentJob?.cancel()
-        currentJob = uiScope.launch {
+        currentJob = viewModelScopeLaunch {
 
             val searchResultFlow = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
@@ -131,7 +129,7 @@ class SongsViewModel constructor(
 
         isIncrementalSearch = true
 
-        currentJob = uiScope.launch {
+        currentJob = viewModelScopeLaunch {
             val maxRetries = 2
 
             val searchResultFlow = when (searchSource) {

@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"/>
 
             <com.github.snuffix.songapp.view.ErrorView
-                    android:id="@+id/errorView"
+                    android:id="@+id/searchErrorView"
                     android:layout_width="match_parent"
                     android:paddingStart="@dimen/spacing_medium"
                     android:paddingEnd="@dimen/spacing_medium"

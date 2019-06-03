@@ -7,7 +7,7 @@ import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
 import com.github.snuffix.songapp.songs.adapter.ViewItem
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
-import kotlinx.android.synthetic.main.fragment_songs.view.*
+import kotlinx.android.synthetic.main.item_error_row.view.*
 
 class IncrementalSearchProgressErrorAdapterDelegate(private val onRetry: () -> Unit) : AdapterDelegate<List<ViewItem>>() {
 

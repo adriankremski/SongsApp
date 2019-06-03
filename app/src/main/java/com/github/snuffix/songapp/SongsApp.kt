@@ -17,15 +17,12 @@ import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
 import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
 import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
 import com.github.snuffix.songapp.mapper.SongsMapper
-import com.github.snuffix.songapp.presentation.Launcher
-import com.github.snuffix.songapp.presentation.LauncherFactory
 import com.github.snuffix.songapp.presentation.SongsViewModel
 import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.remote.SongsRemoteSourceImpl
 import com.github.snuffix.songapp.remote.mapper.RemoteSongsMapper
 import com.github.snuffix.songapp.remote.service.ITunesSongServiceFactory
 import com.github.snuffix.songapp.remote.service.NetworkCheck
-import kotlinx.coroutines.CoroutineScope
 import net.danlew.android.joda.JodaTimeAndroid
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -42,7 +39,7 @@ import timber.log.Timber.DebugTree
 open class SongsApp : Application() {
 
     protected open val serverUrl: String = "https://itunes.apple.com/"
-    protected open val testModules : List<Module> = listOf()
+    protected open val testModules: List<Module> = listOf()
 
     override fun onCreate() {
         super.onCreate()
@@ -104,12 +101,7 @@ open class SongsApp : Application() {
     }
     private val presentationModule = module {
         single { SongViewMapper() }
-        factory<LauncherFactory> {
-            object : LauncherFactory {
-                override fun createLauncher(scope: CoroutineScope) = Launcher.Default(scope)
-            }
-        }
-        viewModel { SongsViewModel(get(), searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
+        viewModel { SongsViewModel(searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
     }
 
     private val uiModule = module {

@@ -69,6 +69,9 @@ dependencies {
     implementation presentationDependencies.koinCoreExt
     implementation presentationDependencies.koinAndroid
     implementation presentationDependencies.koinAndroidViewModel
+    implementation presentationDependencies.espresso
+    implementation mobileTestDependencies.androidRunner
+    implementation mobileTestDependencies.androidRules
 
     implementation presentationDependencies.lifecycleRuntime
     implementation presentationDependencies.lifecycleExtensions

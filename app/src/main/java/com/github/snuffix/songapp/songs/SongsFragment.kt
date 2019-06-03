@@ -61,7 +61,7 @@ class SongsFragment : BaseFragment() {
             Toast.makeText(requireContext(), "Too many requests. Please wait", Toast.LENGTH_LONG).show()
         }
 
-        errorView.onRetry = {
+        searchErrorView.onRetry = {
             songsViewModel.searchSongs(forceFetch = true)
         }
     }
@@ -78,7 +78,7 @@ class SongsFragment : BaseFragment() {
     private fun subscribeToSongs() {
         songsViewModel.songsData().observe(
             onLoading = {
-                errorView.visibility = View.GONE
+                searchErrorView.visibility = View.GONE
                 emptyView.visibility = View.GONE
 
                 if (songsViewModel.isIncrementalSearch) {
@@ -100,7 +100,7 @@ class SongsFragment : BaseFragment() {
                 val songs = resource.data.map { songsMapper.mapToUIModel(it) }
 
                 emptyView.setVisible(songs.isEmpty())
-                errorView.visibility = View.GONE
+                searchErrorView.visibility = View.GONE
                 searchProgress.hide(animate = songs.isNotEmpty())
                 songsAdapter.items = songs
                 songsAdapter.showIncrementalProgress(false)
@@ -127,12 +127,12 @@ class SongsFragment : BaseFragment() {
         searchProgress.hide(animate = false)
         songsAdapter.notifyDataSetChanged()
 
-        errorView.visibility = View.VISIBLE
+        searchErrorView.visibility = View.VISIBLE
 
         if (errorType == ErrorType.NETWORK) {
-            errorView.networkError()
+            searchErrorView.networkError()
         } else {
-            errorView.error(message)
+            searchErrorView.error(message)
         }
     }
 
