@@ -51,7 +51,7 @@ class SongsFragment : BaseFragment() {
 
         songsRecycler.onBottomReached = { songsViewModel.searchSongsIncremental() }
 
-        songsRecycler.adapter = SongsAdapter() {
+        songsRecycler.adapter = SongsAdapter {
             songsViewModel.searchSongsIncremental()
         }
 

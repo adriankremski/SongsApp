@@ -16,6 +16,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -75,7 +76,7 @@ open class SongsApp : Application() {
     }
 
     private val uiModule = module {
-        single { SongsMapper() }
+        single(named("TEST")) { SongsMapper() }
     }
 }
 

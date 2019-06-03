@@ -7,12 +7,11 @@ import com.github.snuffix.songapp.cache.mapper.RawSongsMapper
 import com.github.snuffix.songapp.cache.parser.SongsParser
 import com.github.snuffix.songapp.data.repository.SongsLocalSource
 import org.koin.dsl.module
-import org.koin.experimental.builder.factoryBy
 
 val cacheModule = module {
     single { SongsDatabase.getInstance(get()) }
     single { CachedSongsMapper() }
     single { RawSongsMapper() }
     single { SongsParser() }
-    factoryBy<SongsLocalSource, SongsLocalSourceImpl>()
+    factory<SongsLocalSource> { SongsLocalSourceImpl(get(), get(), get(), get(), get()) }
 }

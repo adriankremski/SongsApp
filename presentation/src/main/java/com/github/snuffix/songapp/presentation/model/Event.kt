@@ -1,5 +1,6 @@
 package com.github.snuffix.songapp.presentation.model
 
+@Suppress("unused")
 open class Event<out T>(private val content: T) {
 
     var hasBeenHandled = false

@@ -10,7 +10,6 @@ import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongDataFactory
 import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -61,9 +60,6 @@ class SongsViewModelTest : AutoCloseKoinTest() {
     }
 
     private fun createViewModel(startSource: SearchSource) = SongsViewModel(
-        launcherFactory = object : LauncherFactory {
-            override fun createLauncher(scope: CoroutineScope) = Launcher.Default(scope)
-        },
         startSearchSource = startSource,
         searchAllSongs = searchAllSongs, searchRemoteSongs = searchRemoteSongs,
         searchLocalSongs = searchLocalSongs, mapper = mapper
