@@ -3,6 +3,7 @@ package com.github.snuffix.songapp
 import android.widget.AutoCompleteTextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -32,7 +33,8 @@ class RemoteSongsScreenTest {
     @get:Rule
     private val activityRule = ActivityTestRule(MainActivity::class.java)
 
-    private lateinit var server: MockWebServer
+    @Rule @JvmField
+    val mockWebServerRule = MockWebServerRule()
 
     private val searchResponse = SongsResponse(results = SongDataFactory.makeSongsList(1000))
 
@@ -41,16 +43,18 @@ class RemoteSongsScreenTest {
 
     @Before
     fun setup() {
+        IdlingRegistry.getInstance().register(coroutinesIdlingResource)
+
         activityRule.launchActivity(null)
 
         setupMockServer(
             EndpointResponse(body = ErrorResponse(403)) { it.startsWith("/search") && it.contains("Eminem") },
-            EndpointResponse(body = searchResponse) { it.startsWith("/search") })
+            EndpointResponse(body = searchResponse) { it.contains("/search") })
     }
 
     @After
     fun tearDown() {
-        server.shutdown()
+        IdlingRegistry.getInstance().unregister(coroutinesIdlingResource)
     }
 
     @Test
@@ -73,9 +77,7 @@ class RemoteSongsScreenTest {
         onView(withId(R.id.searchErrorView)).check(matches(hasDescendant(withText("Too many requests. Please wait"))))
     }
 
-    private fun setupMockServer(vararg responses: EndpointResponse) = MockWebServer().apply {
-        start(MOCK_SERVER_PORT)
-        setResponses(*responses)
-        server = this
+    private fun setupMockServer(vararg responses: EndpointResponse) {
+        mockWebServerRule.server.setResponses(*responses)
     }
 }

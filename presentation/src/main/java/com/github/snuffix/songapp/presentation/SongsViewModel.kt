@@ -19,11 +19,12 @@ import kotlin.properties.Delegates
 
 class SongsViewModel constructor(
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
+    uiScopeLauncher: Launcher,
     private val searchLocalSongs: SearchLocalSongs,
     private val searchRemoteSongs: SearchRemoteSongs,
     private val searchAllSongs: SearchAllSongs,
     private val mapper: SongViewMapper
-) : BaseViewModel(), KoinComponent {
+) : BaseViewModel(uiScopeLauncher), KoinComponent {
 
     private val songs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
@@ -59,8 +60,7 @@ class SongsViewModel constructor(
         }
 
         currentJob?.cancel()
-        currentJob = viewModelScopeLaunch {
-
+        currentJob = launch {
             val searchResultFlow = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
@@ -129,7 +129,7 @@ class SongsViewModel constructor(
 
         isIncrementalSearch = true
 
-        currentJob = viewModelScopeLaunch {
+        currentJob = launch {
             val maxRetries = 2
 
             val searchResultFlow = when (searchSource) {

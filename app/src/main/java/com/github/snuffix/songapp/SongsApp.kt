@@ -76,7 +76,7 @@ open class SongsApp : Application() {
     }
 
     private val uiModule = module {
-        single(named("TEST")) { SongsMapper() }
+        single { SongsMapper() }
     }
 }
 
