@@ -1,6 +1,7 @@
 package com.github.snuffix.songapp.remote.service
 
 import com.github.snuffix.songapp.data.repository.NoConnectivityException
+import com.github.snuffix.songapp.remote.model.NetworkConfiguration
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -13,9 +14,9 @@ import java.util.concurrent.TimeUnit
 
 
 object ITunesSongServiceFactory {
-    fun makeService(serverUrl: String, cacheDir: File, isDebug: Boolean, networkCheck: NetworkCheck): ITunesSongsService {
-        val okHttpClient = makeOkHttpClient(cacheDir, networkCheck, makeLoggingInterceptor((isDebug)))
-        return makeService(serverUrl, okHttpClient)
+    fun makeService(networkConfiguration: NetworkConfiguration, networkCheck: NetworkCheck): ITunesSongsService {
+        val okHttpClient = makeOkHttpClient(networkConfiguration.cacheDir, networkCheck, makeLoggingInterceptor((networkConfiguration.isDebug)))
+        return makeService(networkConfiguration.baseUrl, okHttpClient)
     }
 
     private fun makeService(serverUrl: String, okHttpClient: OkHttpClient): ITunesSongsService {

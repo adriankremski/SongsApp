@@ -21,19 +21,11 @@ class SongsRepositoryImpl constructor(
     private val localSource: SongsLocalSource
 ) : SongsRepository {
 
-    var counter = 0
-
     override suspend fun getRemoteSongs(query: String, offset: Int): Result<List<Song>> {
-        return if (counter < 4) {
-            counter++
-            Result.ApiError(403)
-        } else {
-            counter = 0
-            val result = getResult { remoteSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
+        val result = getResult { remoteSource.getSongs(query = query, offset = offset, limit = QUERY_LIMIT) }
 
-            result.whenOkReturn { songs ->
-                songs.map { mapper.mapFromEntity(it, isFromRemote = true) }
-            }
+        return result.whenOkReturn { songs ->
+            songs.map { mapper.mapFromEntity(it, isFromRemote = true) }
         }
     }
 

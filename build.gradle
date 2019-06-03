@@ -70,10 +70,13 @@ ext {
     mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     assertj = "org.assertj:assertj-core:$assertJVersion"
     retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    koinCore = "org.koin:koin-core:$koinVersion"
+    koinCoreExt = "org.koin:koin-core-ext:$koinVersion"
+    koinAndroid = "org.koin:koin-android:$koinVersion"
 
     mobileDependencies = [
-            koinCore            : "org.koin:koin-core:$koinVersion",
-            koinCoreExt         : "org.koin:koin-core-ext:$koinVersion",
+            koinCore            : koinCore,
+            koinCoreExt         : koinCoreExt,
             koinAndroid         : "org.koin:koin-android:$koinVersion",
             koinAndroidScope    : "org.koin:koin-android-scope:$koinVersion",
             koinAndroidViewModel: "org.koin:koin-android-viewmodel:$koinVersion",
@@ -110,9 +113,8 @@ ext {
             lifecycleViewModel  : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
             timber              : timber,
             kotlin              : kotlin,
-            koinCore            : "org.koin:koin-core:$koinVersion",
-            koinCoreExt         : "org.koin:koin-core-ext:$koinVersion",
-            koinAndroid         : "org.koin:koin-android:$koinVersion",
+            koinCore            : koinCore,
+            koinCoreExt         : koinCoreExt,
             koinAndroidViewModel: "org.koin:koin-android-viewmodel:$koinVersion",
             espresso            : "com.android.support.test.espresso:espresso-core:3.1.0",
             androidRunner       : "androidx.test:runner:$androidRunnerVersion",
@@ -139,6 +141,8 @@ ext {
     domainDependencies = [
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid,
+            koinCore         : koinCore,
+            koinCoreExt      : koinCoreExt,
             kotlin           : kotlin
     ]
 
@@ -150,6 +154,8 @@ ext {
 
     dataDependencies = [
             kotlin           : kotlin,
+            koinCore         : koinCore,
+            koinCoreExt      : koinCoreExt,
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid
     ]
@@ -167,6 +173,8 @@ ext {
             retrofitConverter        : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
             retrofit                 : retrofit,
             kotlin                   : kotlin,
+            koinCore                 : koinCore,
+            koinCoreExt              : koinCoreExt,
             coroutinesCore           : coroutinesCore,
             coroutinesAndroid        : coroutinesAndroid,
             jodaTime                 : jodaTime,
@@ -185,6 +193,8 @@ ext {
             roomCompiler     : "androidx.room:room-compiler:${roomVersion}",
             roomCoroutines   : "androidx.room:room-coroutines:${roomVersion}",
             gson             : gson,
+            koinCore         : koinCore,
+            koinCoreExt      : koinCoreExt,
             kotlin           : kotlin,
             coroutinesCore   : coroutinesCore,
             coroutinesAndroid: coroutinesAndroid

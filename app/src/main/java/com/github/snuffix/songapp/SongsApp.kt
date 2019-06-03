@@ -3,35 +3,20 @@ package com.github.snuffix.songapp
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
-import com.github.snuffix.songapp.cache.SongsLocalSourceImpl
-import com.github.snuffix.songapp.cache.db.SongsDatabase
-import com.github.snuffix.songapp.cache.mapper.CachedSongsMapper
-import com.github.snuffix.songapp.cache.mapper.RawSongsMapper
-import com.github.snuffix.songapp.cache.parser.SongsParser
-import com.github.snuffix.songapp.data.SongsRepositoryImpl
-import com.github.snuffix.songapp.data.mapper.SongsEntityMapper
-import com.github.snuffix.songapp.data.repository.SongsLocalSource
-import com.github.snuffix.songapp.data.repository.SongsRemoteSource
-import com.github.snuffix.songapp.domain.repository.SongsRepository
-import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
-import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
-import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
+import com.github.snuffix.songapp.cache.di.cacheModule
+import com.github.snuffix.songapp.data.di.dataModule
+import com.github.snuffix.songapp.domain.di.domainModule
 import com.github.snuffix.songapp.mapper.SongsMapper
-import com.github.snuffix.songapp.presentation.SongsViewModel
-import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
-import com.github.snuffix.songapp.remote.SongsRemoteSourceImpl
-import com.github.snuffix.songapp.remote.mapper.RemoteSongsMapper
-import com.github.snuffix.songapp.remote.service.ITunesSongServiceFactory
+import com.github.snuffix.songapp.presentation.di.presentationModule
+import com.github.snuffix.songapp.remote.di.remoteModule
+import com.github.snuffix.songapp.remote.model.NetworkConfiguration
 import com.github.snuffix.songapp.remote.service.NetworkCheck
 import net.danlew.android.joda.JodaTimeAndroid
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import org.koin.experimental.builder.factoryBy
-import org.koin.experimental.builder.singleBy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -56,23 +41,20 @@ open class SongsApp : Application() {
             // modules
 
             val productionModules = listOf(
-                cacheModule, remoteModule,
-                dataModule, domainModule, presentationModule, uiModule
+                cacheModule,
+                remoteModule,
+                dataModule,
+                domainModule,
+                presentationModule,
+                applicationModule,
+                uiModule
             )
 
             modules(productionModules + testModules)
         }
     }
 
-    private val cacheModule = module {
-        single { SongsDatabase.getInstance(get()) }
-        single { CachedSongsMapper() }
-        single { RawSongsMapper() }
-        single { SongsParser() }
-        factoryBy<SongsLocalSource, SongsLocalSourceImpl>()
-    }
-
-    private val remoteModule = module {
+    private val applicationModule = module {
         single<NetworkCheck> {
             object : NetworkCheck {
                 val connectivityManager = androidApplication().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -83,25 +65,13 @@ open class SongsApp : Application() {
                 }
             }
         }
-
-        single { RemoteSongsMapper() }
-        single { ITunesSongServiceFactory.makeService(serverUrl, androidApplication().cacheDir, BuildConfig.DEBUG, get()) }
-        factoryBy<SongsRemoteSource, SongsRemoteSourceImpl>()
-    }
-
-    private val dataModule = module {
-        single { SongsEntityMapper() }
-        singleBy<SongsRepository, SongsRepositoryImpl>()
-    }
-
-    private val domainModule = module {
-        factory { SearchAllSongs(get()) }
-        factory { SearchLocalSongs(get()) }
-        factory { SearchRemoteSongs(get()) }
-    }
-    private val presentationModule = module {
-        single { SongViewMapper() }
-        viewModel { SongsViewModel(searchLocalSongs = get(), searchRemoteSongs = get(), searchAllSongs = get(), mapper = get()) }
+        single<NetworkConfiguration> {
+            object : NetworkConfiguration {
+                override val baseUrl = serverUrl
+                override val cacheDir = androidApplication().cacheDir
+                override val isDebug = BuildConfig.DEBUG
+            }
+        }
     }
 
     private val uiModule = module {

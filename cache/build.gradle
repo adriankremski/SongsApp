@@ -33,6 +33,8 @@ dependencies {
     implementation cacheDependencies.gson
     implementation cacheDependencies.coroutinesCore
     implementation cacheDependencies.coroutinesAndroid
+    implementation cacheDependencies.koinCore
+    implementation cacheDependencies.koinCoreExt
 
     testImplementation cacheTestDependencies.junit
     testImplementation cacheTestDependencies.mockito

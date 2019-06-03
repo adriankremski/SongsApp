@@ -19,6 +19,8 @@ dependencies {
     implementation remoteDependencies.retrofit
     implementation remoteDependencies.retrofitConverter
     implementation remoteDependencies.jodaTime
+    implementation remoteDependencies.koinCore
+    implementation remoteDependencies.koinCoreExt
 
     testImplementation remoteTestDependencies.junit
     testImplementation remoteTestDependencies.mockito
