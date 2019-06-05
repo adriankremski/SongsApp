@@ -1,28 +1,13 @@
 package com.github.snuffix.songapp
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import com.github.snuffix.songapp.presentation.model.ErrorType
 import com.github.snuffix.songapp.presentation.model.Event
 import com.github.snuffix.songapp.presentation.model.Resource
 
 abstract class BaseFragment : Fragment() {
-
-    fun <T : ViewDataBinding> performDataBinding(
-        layoutResID: Int,
-        inflater: LayoutInflater, container: ViewGroup?,
-        viewModel: ViewModel
-    ): T {
-        val viewDataBinding: T = DataBindingUtil.inflate(inflater, layoutResID, container, false)
-        viewDataBinding.lifecycleOwner = this
-        viewDataBinding.setVariable(layoutResID, viewModel)
-        return viewDataBinding
-    }
 
     fun <T : Any> LiveData<Event<T>>.observe(
         onChanged: (T) -> Unit = {}
@@ -34,8 +19,8 @@ abstract class BaseFragment : Fragment() {
 
     fun <T : Any> LiveData<Resource<T>>.observe(
         onLoading: () -> Unit = {},
-        onError: (Resource.Error<T>) -> Unit = {},
-        onSuccess: (Resource.Success<T>) -> Unit = {}
+        onError: (String?, ErrorType) -> Unit = { message, errorType -> },
+        onSuccess: (T) -> Unit = {}
     ) {
         observe(viewLifecycleOwner, Observer<Resource<T>> { resource ->
             resource?.let {
@@ -44,10 +29,10 @@ abstract class BaseFragment : Fragment() {
                         onLoading()
                     }
                     is Resource.Error -> {
-                        onError(resource)
+                        onError(resource.message, resource.errorType)
                     }
                     is Resource.Success -> {
-                        onSuccess(resource)
+                        onSuccess(resource.data)
                     }
                 }
             }

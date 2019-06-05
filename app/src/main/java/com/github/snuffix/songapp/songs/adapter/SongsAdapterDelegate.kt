@@ -9,21 +9,21 @@ import com.bumptech.glide.request.RequestOptions
 import com.github.snuffix.songapp.R
 import com.github.snuffix.songapp.extensions.inflateView
 import com.github.snuffix.songapp.model.Song
+import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import kotlinx.android.synthetic.main.item_song_row.view.*
 import java.text.DateFormat
 
 
-class SongsAdapterDelegate : AdapterDelegate<List<ViewItem>>() {
+class SongsAdapterDelegate : AbsListItemAdapterDelegate<Song, ViewItem, SongsAdapterDelegate.SongItemHolder>() {
 
-    override fun onBindViewHolder(items: List<ViewItem>, position: Int, holder: RecyclerView.ViewHolder, payloads: MutableList<Any>) {
-        holder as SongItemHolder
-        holder.bind(items[position] as Song)
+    override fun onBindViewHolder(item: Song, holder: SongItemHolder, payloads: MutableList<Any>) {
+        holder.bind(item)
     }
 
-    override fun isForViewType(items: List<ViewItem>, position: Int) = items[position] is Song
+    override fun isForViewType(item: ViewItem, items: MutableList<ViewItem>, position: Int) = item is Song
 
-    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): SongItemHolder {
         val itemView = parent.context.inflateView(R.layout.item_song_row, parent)
         return SongItemHolder(itemView)
     }

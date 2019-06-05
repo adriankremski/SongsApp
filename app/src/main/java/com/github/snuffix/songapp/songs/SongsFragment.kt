@@ -6,7 +6,6 @@ import android.widget.Toast
 import com.github.snuffix.songapp.BaseFragment
 import com.github.snuffix.songapp.MainActivity
 import com.github.snuffix.songapp.R
-import com.github.snuffix.songapp.databinding.FragmentSongsBinding
 import com.github.snuffix.songapp.extensions.setVisible
 import com.github.snuffix.songapp.mapper.SongsMapper
 import com.github.snuffix.songapp.presentation.SearchSource
@@ -33,13 +32,11 @@ class SongsFragment : BaseFragment() {
         get() = songsRecycler.adapter as SongsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewDataBinding = performDataBinding<FragmentSongsBinding>(
-            inflater = inflater, layoutResID = R.layout.fragment_songs, container = container, viewModel = songsViewModel
-        )
+        val root = inflater.inflate(R.layout.fragment_songs, container, false)
 
         setHasOptionsMenu(true)
 
-        return viewDataBinding.root
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,15 +86,15 @@ class SongsFragment : BaseFragment() {
                     searchProgress.show()
                 }
             },
-            onError = {
+            onError = { message, errorType ->
                 if (songsViewModel.isIncrementalSearch) {
-                    onIncrementalSearchError(message = it.message, errorType = it.errorType)
+                    onIncrementalSearchError(message = message, errorType = errorType)
                 } else {
-                    onSearchError(message = it.message, errorType = it.errorType)
+                    onSearchError(message = message, errorType = errorType)
                 }
             },
-            onSuccess = { resource ->
-                val songs = resource.data.map { songsMapper.mapToUIModel(it) }
+            onSuccess = { songs ->
+                val songs = songs.map { songsMapper.mapToUIModel(it) }
 
                 emptyView.setVisible(songs.isEmpty())
                 searchErrorView.visibility = View.GONE
@@ -145,9 +142,9 @@ class SongsFragment : BaseFragment() {
         inflater.inflate(R.menu.menu_songs, menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
         val selectedItemId = searchModeToIdMapping.entries.first { it.value == songsViewModel.searchSource }.key
-        menu?.findItem(selectedItemId)?.isChecked = true
+        menu.findItem(selectedItemId)?.isChecked = true
         super.onPrepareOptionsMenu(menu)
     }
 

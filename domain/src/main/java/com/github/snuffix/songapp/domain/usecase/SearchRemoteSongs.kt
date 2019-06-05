@@ -9,5 +9,5 @@ open class SearchRemoteSongs constructor(retryLogic: BaseRetryLogic, private val
 
     override suspend fun execute(params: Params): Result<List<Song>> = songsRepository.getRemoteSongs(params.query, params.offset)
 
-    data class Params(val query: String, val offset: Int)
+    data class Params(val query: String, val offset: Int = 0)
 }

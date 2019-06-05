@@ -9,9 +9,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 open class SearchAllSongs constructor(retryLogic: BaseRetryLogic, private val songsRepository: SongsRepository) :
-    BaseUseCase<List<Song>, SearchAllSongs.Params>(retryLogic) {
+    BaseUseCase<Songs, SearchAllSongs.Params>(retryLogic) {
 
-    override suspend fun execute(params: Params): Result<List<Song>> = withContext(Dispatchers.IO) {
+    override suspend fun execute(params: Params): Result<Songs> = withContext(Dispatchers.IO) {
         val remoteSongs = async { songsRepository.getRemoteSongs(params.query, params.remoteSongsOffset) }
         val localSongs = async { songsRepository.getLocalSongs(params.query, params.localSongsOffset) }
 
@@ -24,11 +24,13 @@ open class SearchAllSongs constructor(retryLogic: BaseRetryLogic, private val so
             remoteSongsResult as Result.Ok
             localSongsResult as Result.Ok
 
-            Result.Ok((remoteSongsResult.value + localSongsResult.value))
+            Result.Ok(Songs(externalSongs = remoteSongsResult.value, localSongs = localSongsResult.value))
         } else {
             combinedResult.firstErrorResult()
         }
     }
 
-    data class Params(val query: String, val remoteSongsOffset: Int, val localSongsOffset: Int)
+    data class Params(val query: String, val remoteSongsOffset: Int = 0, val localSongsOffset: Int = 0)
 }
+
+data class Songs(val externalSongs: List<Song>, val localSongs: List<Song>)

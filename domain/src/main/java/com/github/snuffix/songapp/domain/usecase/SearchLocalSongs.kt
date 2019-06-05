@@ -9,5 +9,5 @@ open class SearchLocalSongs constructor(retryLogic: BaseRetryLogic, private val 
 
     override suspend fun execute(params: Params): Result<List<Song>> = songsRepository.getLocalSongs(params.query, params.offset)
 
-    data class Params constructor(val query: String, val offset: Int)
+    data class Params constructor(val query: String, val offset: Int = 0)
 }

@@ -4,18 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.snuffix.songapp.domain.model.Result
 import com.github.snuffix.songapp.domain.model.Song
-import com.github.snuffix.songapp.domain.usecase.SearchAllSongs
-import com.github.snuffix.songapp.domain.usecase.SearchLocalSongs
-import com.github.snuffix.songapp.domain.usecase.SearchRemoteSongs
+import com.github.snuffix.songapp.domain.usecase.*
 import com.github.snuffix.songapp.presentation.mapper.SongViewMapper
 import com.github.snuffix.songapp.presentation.model.Event
 import com.github.snuffix.songapp.presentation.model.Resource
 import com.github.snuffix.songapp.presentation.model.SongView
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import org.koin.core.KoinComponent
-import timber.log.Timber
 import kotlin.properties.Delegates
+
+const val INCREMENTAL_SEARCH_MAX_RETRIES = 2
 
 class SongsViewModel constructor(
     startSearchSource: SearchSource = SearchSource.ALL_SONGS,
@@ -26,7 +26,9 @@ class SongsViewModel constructor(
     private val mapper: SongViewMapper
 ) : BaseViewModel(uiScopeLauncher), KoinComponent {
 
-    private val songs = mutableListOf<SongView>()
+    private var externalSongsOffset = 0
+    private var localSongsOffset = 0
+    private val displayedSongs = mutableListOf<SongView>()
     private val songsResource: MutableLiveData<Resource<List<SongView>>> = MutableLiveData()
     private val tooManyRequestsToast = MutableLiveData<Event<Boolean>>()
 
@@ -38,7 +40,7 @@ class SongsViewModel constructor(
     fun songsData(): LiveData<Resource<List<SongView>>> = songsResource
     fun tooManyRequestsToast(): LiveData<Event<Boolean>> = tooManyRequestsToast
 
-    val isTooManyRequestsError: (Result<List<Song>>) -> Boolean = { it is Result.ApiError && it.code == 403 }
+    val isTooManyRequestsError: (Result<Any>) -> Boolean = { it is Result.ApiError && it.code == 403 }
 
     var searchSource: SearchSource by Delegates.observable(startSearchSource) { _, oldMode, newMode ->
         if (oldMode != newMode) {
@@ -51,7 +53,7 @@ class SongsViewModel constructor(
 
         lastQuery = query
 
-        songs.clear()
+        displayedSongs.clear()
 
         isIncrementalSearch = false
 
@@ -61,47 +63,41 @@ class SongsViewModel constructor(
 
         currentJob?.cancel()
         currentJob = launch {
-            val searchResultFlow = when (searchSource) {
+            when (searchSource) {
                 SearchSource.ALL_SONGS -> {
-                    Timber.d("Fetching local songs with offset 0, and remote with offset 0")
-                    val params = SearchAllSongs.Params(lastQuery, 0, 0)
-                    searchAllSongs.executeWithRetry(params) {
-                        isTooManyRequestsError(this)
+                    executeSearch(searchAllSongs, params = SearchAllSongs.Params(lastQuery)) {
+                        externalSongsOffset = it.externalSongs.size
+                        localSongsOffset = it.localSongs.size
+
+                        displaySongs(it.externalSongs + it.localSongs)
                     }
                 }
                 SearchSource.REMOTE_SONGS -> {
-                    Timber.d("Fetching remote songs with offset 0")
-                    val params = SearchRemoteSongs.Params(lastQuery, 0)
-                    searchRemoteSongs.executeWithRetry(params) {
-                        isTooManyRequestsError(this)
-                    }
+                    executeSearch(searchRemoteSongs, params = SearchRemoteSongs.Params(lastQuery), displayData = ::displaySongs)
                 }
                 SearchSource.LOCAL_SONGS -> {
-                    Timber.d("Fetching local songs with offset 0")
-                    val params = SearchLocalSongs.Params(lastQuery, 0)
-                    searchLocalSongs.executeWithRetry(params) {
-                        isTooManyRequestsError(this)
-                    }
-                }
-            }
-
-            searchResultFlow.collect {
-                val retryNumber = it.retryNumber
-                val searchResult = it.result
-
-                searchResult.whenOk {
-                    handleSearchSuccess(this)
-                }.whenError {
-                    handleSearchError(this)
+                    executeSearch(searchLocalSongs, params = SearchLocalSongs.Params(lastQuery), displayData = ::displaySongs)
                 }
             }
         }
     }
 
-    private fun handleSearchSuccess(result: Result.Ok<List<Song>>) {
-        hasMoreSongs = result.value.isNotEmpty()
-        songs.addAll(result.value.mapToView())
-        songsResource.postValue(Resource.Success(songs.distinctBy { it.id }))
+    private suspend fun <DATA : Any, Params : Any> executeSearch(
+        useCase: BaseUseCase<DATA, Params>,
+        params: Params,
+        displayData: (DATA) -> Unit
+    ) {
+        useCase.execute(params = params).whenOk {
+            displayData(this.value)
+        }.whenError {
+            handleSearchError(this)
+        }
+    }
+
+    private fun displaySongs(songs: List<Song>) {
+        hasMoreSongs = songs.isNotEmpty()
+        displayedSongs.addAll(songs.mapToView())
+        songsResource.postValue(Resource.Success(displayedSongs.distinctBy { it.id }))
     }
 
     private fun handleSearchError(errorResult: Result.Error) {
@@ -130,51 +126,58 @@ class SongsViewModel constructor(
         isIncrementalSearch = true
 
         currentJob = launch {
-            val maxRetries = 2
-
-            val searchResultFlow = when (searchSource) {
+            when (searchSource) {
                 SearchSource.ALL_SONGS -> {
-                    val localSongsOffset = songs.count { !it.isFromRemote }
-                    val remoteSongsOffset = songs.size - localSongsOffset
+                    val params = SearchAllSongs.Params(lastQuery, localSongsOffset = localSongsOffset, remoteSongsOffset = externalSongsOffset)
 
-                    Timber.d("Fetching local songs with offset $localSongsOffset, and remote with offset $remoteSongsOffset")
-                    val params = SearchAllSongs.Params(lastQuery, localSongsOffset = localSongsOffset, remoteSongsOffset = remoteSongsOffset)
-                    searchAllSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
-                        isTooManyRequestsError(this)
+                    executeIncrementalSearch(params = params, useCase = searchAllSongs) {
+                        externalSongsOffset += it.externalSongs.size
+                        localSongsOffset += it.localSongs.size
+
+                        displaySongs(it.externalSongs + it.localSongs)
                     }
                 }
                 SearchSource.REMOTE_SONGS -> {
-                    val offset = songs.size
-                    Timber.d("Fetching remote songs with offset $offset")
-                    val params = SearchRemoteSongs.Params(lastQuery, offset)
-                    searchRemoteSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
-                        isTooManyRequestsError(this)
+                    val params = SearchRemoteSongs.Params(lastQuery, offset = displayedSongs.size)
+                    executeIncrementalSearch(params = params, useCase = searchRemoteSongs) {
+                        displaySongs(it)
                     }
                 }
                 SearchSource.LOCAL_SONGS -> {
-                    val offset = songs.size
-                    Timber.d("Fetching local songs with offset $offset")
-                    val params = SearchLocalSongs.Params(lastQuery, offset)
-                    searchLocalSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
-                        isTooManyRequestsError(this)
+                    val params = SearchLocalSongs.Params(lastQuery, offset = displayedSongs.size)
+                    executeIncrementalSearch(params = params, useCase = searchLocalSongs) {
+                        displaySongs(it)
                     }
                 }
             }
 
-            searchResultFlow.collect {
-                val retryNumber = it.retryNumber
-                val searchResult = it.result
+        }
+    }
 
-                searchResult.whenOk {
-                    handleSearchSuccess(this)
-                }.whenError {
-                    if (isTooManyRequestsError(this) && retryNumber == 0) {
-                        tooManyRequestsToast.postValue(Event(true))
-                    } else if (retryNumber == maxRetries) {
-                        handleSearchError(this)
-                    }
-                }
+    private suspend fun <DATA : Any, Params : Any> executeIncrementalSearch(
+        useCase: BaseUseCase<DATA, Params>,
+        params: Params,
+        displayData: (DATA) -> Unit
+    ) {
+        useCase.executeWithRetry(params = params, emitFailedResult = true, maxRetries = INCREMENTAL_SEARCH_MAX_RETRIES) {
+            isTooManyRequestsError(this)
+        }.collect {
+            val retryNumber = it.retryNumber
+            val searchResult = it.result
+
+            searchResult.whenOk {
+                displayData(this.value)
+            }.whenError {
+                handleIncrementalSearchError(errorResult = this, retryNumber = retryNumber, maxRetries = INCREMENTAL_SEARCH_MAX_RETRIES)
             }
+        }
+    }
+
+    private fun handleIncrementalSearchError(errorResult: Result.Error, retryNumber: Int, maxRetries: Int) {
+        if (isTooManyRequestsError(errorResult) && retryNumber == 0) {
+            tooManyRequestsToast.postValue(Event(true))
+        } else if (retryNumber == maxRetries) {
+            handleSearchError(errorResult)
         }
     }
 

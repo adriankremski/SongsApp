@@ -1,76 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/contentLayout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
-        <variable name="viewmodel"
-                  type="com.github.snuffix.songapp.presentation.SongsViewModel"/>
-    </data>
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            style="@style/Widget.Design.AppBarLayout"
+            android:background="@android:color/background_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/contentLayout"
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:theme="@style/DefaultToolbar"
+                android:background="?colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+            <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.github.snuffix.songapp.view.SearchProgressView
+                android:id="@+id/searchProgress"
+                android:layout_margin="@dimen/spacing_medium"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <com.github.snuffix.songapp.view.EmptyListView
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_medium"
+                android:layout_height="wrap_content"/>
+
+        <com.github.snuffix.songapp.view.ErrorView
+                android:id="@+id/searchErrorView"
+                android:layout_width="match_parent"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_medium"
+                android:visibility="gone"
+                android:layout_height="wrap_content"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.github.snuffix.songapp.view.SongsRecyclerView
+            android:id="@+id/songsRecycler"
+            android:descendantFocusability="beforeDescendants"
+            android:background="@android:color/background_light"
+            android:padding="@dimen/spacing_normal"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
-                style="@style/Widget.Design.AppBarLayout"
-                android:background="@android:color/background_light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:elevation="0dp">
-
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:theme="@style/DefaultToolbar"
-                    android:background="?colorPrimary"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    app:layout_scrollFlags="scroll|enterAlways">
-
-                <androidx.appcompat.widget.SearchView
-                        android:id="@+id/searchView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-            </androidx.appcompat.widget.Toolbar>
-
-            <com.github.snuffix.songapp.view.SearchProgressView
-                    android:id="@+id/searchProgress"
-                    android:layout_margin="@dimen/spacing_medium"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            <com.github.snuffix.songapp.view.EmptyListView
-                    android:id="@+id/emptyView"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/spacing_medium"
-                    android:paddingEnd="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
-                    android:layout_height="wrap_content"/>
-
-            <com.github.snuffix.songapp.view.ErrorView
-                    android:id="@+id/searchErrorView"
-                    android:layout_width="match_parent"
-                    android:paddingStart="@dimen/spacing_medium"
-                    android:paddingEnd="@dimen/spacing_medium"
-                    android:paddingTop="@dimen/spacing_medium"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.github.snuffix.songapp.view.SongsRecyclerView
-                android:id="@+id/songsRecycler"
-                android:descendantFocusability="beforeDescendants"
-                android:background="@android:color/background_light"
-                android:padding="@dimen/spacing_normal"
-                android:clipToPadding="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
