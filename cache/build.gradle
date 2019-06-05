@@ -22,9 +22,6 @@ android {
 }
 
 dependencies {
-    def cacheDependencies = rootProject.ext.cacheDependencies
-    def cacheTestDependencies = rootProject.ext.cacheTestDependencies
-
     implementation project(':data')
 
     implementation cacheDependencies.kotlin

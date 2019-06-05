@@ -45,9 +45,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    def mobileDependencies = rootProject.ext.mobileDependencies
-    def mobileTestDependencies = rootProject.ext.mobileTestDependencies
-
     implementation project(':presentation')
     implementation project(':data')
     implementation project(':domain')
@@ -73,6 +70,7 @@ dependencies {
     implementation mobileDependencies.coroutinesAndroid
     implementation mobileDependencies.adapterDelegates
     implementation mobileDependencies.jodaTime
+    implementation mobileDependencies.fragmentKtx
 
     kapt mobileDependencies.lifecycleCompiler
 

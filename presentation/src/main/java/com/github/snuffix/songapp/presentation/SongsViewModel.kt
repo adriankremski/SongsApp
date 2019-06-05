@@ -64,21 +64,21 @@ class SongsViewModel constructor(
             val searchResultFlow = when (searchSource) {
                 SearchSource.ALL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0, and remote with offset 0")
-                    val params = SearchAllSongs.Params.create(lastQuery, 0, 0)
+                    val params = SearchAllSongs.Params(lastQuery, 0, 0)
                     searchAllSongs.executeWithRetry(params) {
                         isTooManyRequestsError(this)
                     }
                 }
                 SearchSource.REMOTE_SONGS -> {
                     Timber.d("Fetching remote songs with offset 0")
-                    val params = SearchRemoteSongs.Params.create(lastQuery, 0)
+                    val params = SearchRemoteSongs.Params(lastQuery, 0)
                     searchRemoteSongs.executeWithRetry(params) {
                         isTooManyRequestsError(this)
                     }
                 }
                 SearchSource.LOCAL_SONGS -> {
                     Timber.d("Fetching local songs with offset 0")
-                    val params = SearchLocalSongs.Params.create(lastQuery, 0)
+                    val params = SearchLocalSongs.Params(lastQuery, 0)
                     searchLocalSongs.executeWithRetry(params) {
                         isTooManyRequestsError(this)
                     }
@@ -138,7 +138,7 @@ class SongsViewModel constructor(
                     val remoteSongsOffset = songs.size - localSongsOffset
 
                     Timber.d("Fetching local songs with offset $localSongsOffset, and remote with offset $remoteSongsOffset")
-                    val params = SearchAllSongs.Params.create(lastQuery, localSongsOffset = localSongsOffset, remoteSongsOffset = remoteSongsOffset)
+                    val params = SearchAllSongs.Params(lastQuery, localSongsOffset = localSongsOffset, remoteSongsOffset = remoteSongsOffset)
                     searchAllSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
                         isTooManyRequestsError(this)
                     }
@@ -146,7 +146,7 @@ class SongsViewModel constructor(
                 SearchSource.REMOTE_SONGS -> {
                     val offset = songs.size
                     Timber.d("Fetching remote songs with offset $offset")
-                    val params = SearchRemoteSongs.Params.create(lastQuery, offset)
+                    val params = SearchRemoteSongs.Params(lastQuery, offset)
                     searchRemoteSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
                         isTooManyRequestsError(this)
                     }
@@ -154,7 +154,7 @@ class SongsViewModel constructor(
                 SearchSource.LOCAL_SONGS -> {
                     val offset = songs.size
                     Timber.d("Fetching local songs with offset $offset")
-                    val params = SearchLocalSongs.Params.create(lastQuery, offset)
+                    val params = SearchLocalSongs.Params(lastQuery, offset)
                     searchLocalSongs.executeWithRetry(params, emitFailedResult = true, maxRetries = maxRetries) {
                         isTooManyRequestsError(this)
                     }

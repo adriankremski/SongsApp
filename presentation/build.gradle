@@ -57,8 +57,6 @@ kapt {
 }
 
 dependencies {
-    def presentationDependencies = rootProject.ext.presentationDependencies
-
     implementation project(':domain')
 
     implementation presentationDependencies.timber

@@ -7,12 +7,10 @@ import kotlinx.coroutines.flow.flow
 import java.util.concurrent.TimeUnit
 
 abstract class BaseUseCase<DATA : Any, in Params>(private val retryLogic: BaseRetryLogic) {
-    abstract suspend fun buildUseCase(params: Params? = null): Result<DATA>
-
-    open suspend fun execute(params: Params? = null) = buildUseCase(params)
+    abstract suspend fun execute(params: Params): Result<DATA>
 
     open suspend fun executeWithRetry(
-        params: Params? = null,
+        params: Params,
         emitFailedResult: Boolean = false,
         maxRetries: Int = 3,
         initialDelay: Long = TimeUnit.SECONDS.toMillis(1),
@@ -29,22 +27,22 @@ abstract class BaseUseCase<DATA : Any, in Params>(private val retryLogic: BaseRe
 
 interface RetryLogic {
     fun <DATA : Any, Params> asFlow(
-        params: Params? = null,
+        params: Params,
         emitFailedResult: Boolean = false,
         maxRetries: Int = 3,
         initialDelay: Long = TimeUnit.SECONDS.toMillis(1),
-        execute: suspend (Params?) -> Result<DATA>,
+        execute: suspend (Params) -> Result<DATA>,
         shouldRetry: Result<DATA>.() -> Boolean
     ): Flow<RetryResult<DATA>>
 }
 
 class BaseRetryLogic : RetryLogic {
     override fun <DATA : Any, Params> asFlow(
-        params: Params?,
+        params: Params,
         emitFailedResult: Boolean,
         maxRetries: Int,
         initialDelay: Long,
-        execute: suspend (Params?) -> Result<DATA>,
+        execute: suspend (Params) -> Result<DATA>,
         shouldRetry: Result<DATA>.() -> Boolean
     ): Flow<RetryResult<DATA>> = flow {
 

@@ -1,12 +1,9 @@
 apply plugin: 'kotlin'
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+sourceCompatibility = "8"
+targetCompatibility = "8"
 
 dependencies {
-    def domainDependencies = rootProject.ext.domainDependencies
-    def domainTestDependencies = rootProject.ext.domainTestDependencies
-
     implementation domainDependencies.kotlin
     implementation domainDependencies.coroutinesCore
     implementation domainDependencies.coroutinesAndroid
