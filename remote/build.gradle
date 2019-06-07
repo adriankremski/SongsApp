@@ -10,7 +10,6 @@ dependencies {
     implementation remoteDependencies.okHttp
     implementation remoteDependencies.coroutinesCore
     implementation remoteDependencies.coroutinesAndroid
-    implementation remoteDependencies.retrofitCoroutinesAdapter
     implementation remoteDependencies.okHttpLogger
     implementation remoteDependencies.retrofit
     implementation remoteDependencies.retrofitConverter

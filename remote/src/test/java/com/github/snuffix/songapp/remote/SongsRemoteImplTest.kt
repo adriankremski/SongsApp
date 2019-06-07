@@ -12,6 +12,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import retrofit2.Response
 
 class SongsRemoteImplTest : BaseRemoteTest() {
 
@@ -32,7 +33,7 @@ class SongsRemoteImplTest : BaseRemoteTest() {
 
     private fun stubSearchSongs(model: SongsResponse) {
         runBlocking {
-            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(deferredSuccessResponseOf(model))
+            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(Response.success(model))
         }
     }
 
@@ -64,7 +65,7 @@ class SongsRemoteImplTest : BaseRemoteTest() {
 
     private fun stubSearchSongsError(errorCode: Int) {
         runBlocking {
-            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(deferredApiError(403, responseBodyOf(SongDataFactory.makeSongsResponse(listOf()))))
+            whenever(service.searchSongsAsync(any(), any(), any())).thenReturn(Response.error(403, responseBodyOf(SongDataFactory.makeSongsResponse(listOf()))))
         }
     }
 }

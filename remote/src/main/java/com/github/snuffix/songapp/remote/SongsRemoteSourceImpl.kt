@@ -17,7 +17,7 @@ class SongsRemoteSourceImpl constructor(
 
     override suspend fun getSongs(query: String, offset: Int, limit: Int): List<SongEntity> =
         withContext(Dispatchers.IO) {
-            val response = service.searchSongsAsync(query = query, offset = offset, limit = limit).await().getBodyOrThrow()
+            val response = service.searchSongsAsync(query = query, offset = offset, limit = limit).getBodyOrThrow()
             response.results.map { item -> mapper.mapFromModel(item) }
         }
 }

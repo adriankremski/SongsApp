@@ -2,7 +2,6 @@ package com.github.snuffix.songapp.remote.service
 
 import com.github.snuffix.songapp.data.repository.NoConnectivityException
 import com.github.snuffix.songapp.remote.model.NetworkConfiguration
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -24,7 +23,6 @@ object ITunesSongServiceFactory {
             .baseUrl(serverUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
         return retrofit.create(ITunesSongsService::class.java)
